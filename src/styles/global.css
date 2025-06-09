@@ -1,0 +1,1919 @@
+/* ---------- Global Reset ---------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ---------- Base Styling ---------- */
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #f0f2f5;
+  color: #333;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* ---------- Dark Mode ---------- */
+body.dark-mode {
+  background: #121212;
+  color: #fff;
+}
+
+/* ---------- Layout ---------- */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ---------- Navbar ---------- */
+.navbar {
+  background-color: #262626;
+  color: #fff;
+  padding: 1rem 0;
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+}
+
+.logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.nav-links a {
+  margin-left: 20px;
+  color: #fff;
+  text-decoration: none;
+  transition: transform 0.2s, color 0.2s;
+}
+
+.nav-links a:hover {
+  transform: scale(1.1);
+  color: #ffd700;
+}
+
+.dark-mode-toggle {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* ---------- Content Area ---------- */
+.content {
+  max-width: 1200px;
+  margin: 2rem auto;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  animation: fadeIn 1s ease-in;
+}
+
+/* General Home Page Layout */
+.home {
+  padding: 2rem;
+  font-family: 'Arial', sans-serif;
+  color: #333;
+}
+
+/* ----------------------------------
+   Hero Section
+------------------------------------- */
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 2rem 0;
+}
+
+.hero-content {
+  flex: 1 1 500px;
+  max-width: 600px;
+}
+
+.hero-content h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+ color: var(--text-color);
+}
+
+.hero-content p {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+    color: var(--text-color);
+}
+
+.explore-btn {
+  padding: 0.8rem 1.5rem;
+  background-color: #007bff;
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.1rem;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+.explore-btn:hover {
+  background-color: #0056b3;
+}
+
+.hero-img {
+  flex: 1 1 400px;
+  text-align: center;
+}
+
+.hero-img img {
+  width: 100%;
+  max-width: 600px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* ----------------------------------
+   Features Section
+------------------------------------- */
+.features {
+  padding: 3rem 0;
+  background-color: #f5f5f5;
+  text-align: center;
+}
+
+.features h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  padding: 0 1rem;
+}
+
+.feature-card {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.feature-card .icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #007bff;
+}
+
+.feature-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.feature-card p {
+  font-size: 1rem;
+  color: #555;
+}
+
+
+.features {
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+}
+
+.feature-card {
+  background: var(--card-bg-color);
+  box-shadow: 0 2px 10px var(--shadow-color);
+}
+.feature-card .icon {
+  color: var(--btn-bg-color);
+}
+
+/* ----------------------------------
+   Testimonials Section
+------------------------------------- */
+.testimonials {
+  padding: 3rem 0;
+  background-color: #ffffff;
+  text-align: center;
+}
+
+.testimonials h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.testimonial-card {
+  max-width: 800px;
+  margin: 0 auto;
+  font-style: italic;
+  color: #666;
+  background: #f8f8f8;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease;
+}
+
+.testimonial-card:hover {
+  transform: scale(1.02);
+}
+
+.testimonial-text {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.testimonial-author {
+  font-size: 1rem;
+  color: #333;
+}
+
+
+.testimonials {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+.testimonial-card {
+  background: var(--secondary-color);
+  box-shadow: 0 2px 8px var(--shadow-color);
+  color: var(--text-color);
+}
+
+
+/* ----------------------------------
+   Responsive Adjustments
+------------------------------------- */
+@media (max-width: 768px) {
+  .hero {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .hero-content h1 {
+    font-size: 2.5rem;
+  }
+
+  .hero-img {
+    margin-top: 2rem;
+  }
+}
+
+.hero {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 2rem 0;
+}
+
+.hero-content, .hero-img {
+  flex: 1 1 300px;
+}
+
+
+
+
+
+/* =====================================
+   CSS Variables: Default Light Mode
+======================================= */
+:root {
+  --bg-color: #ffffff;
+  --text-color: #333333;
+  --primary-color: #007bff;
+  --secondary-color: #f5f5f5;
+  --accent-color: #374151;
+  --card-bg-color: #ffffff;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --btn-bg-color: #007bff;
+  --btn-hover-bg-color: #0056b3;
+}
+
+/* =====================================
+    Dark Mode Variables
+   (Applied when <body class="dark-mode"> is active)
+======================================= */
+body.dark-mode {
+  --bg-color: #121212;
+  --text-color: #e0e0e0;
+  --primary-color: #0d6efd;
+  --secondary-color: #1e1e1e;
+  --accent-color: #333333;
+  --card-bg-color: #1e1e1e;
+  --shadow-color: rgba(0, 0, 0, 0.5);
+  --btn-bg-color: #0d6efd;
+  --btn-hover-bg-color: #0056b3;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  font-family: 'Arial', sans-serif;
+}
+
+
+
+
+/* ---------- Forms (Login/Register) ---------- */
+.auth-container {
+  max-width: 400px;
+  margin: auto;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  animation: fadeIn 1s ease-in;
+}
+
+.auth-container h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+}
+
+.auth-container form {
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-container label {
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.auth-container input {
+  padding: 0.6rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.2s;
+}
+
+.auth-container input:focus {
+  border-color: #007bff;
+}
+
+.auth-container button {
+  padding: 0.8rem;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.auth-container button:hover {
+  background: #0056b3;
+}
+
+.error {
+  color: red;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+/* ---------- Event List & Cards ---------- */
+
+
+/* =====================================================
+   CSS Variables for Event Section (Default: Light Mode)
+======================================================= */
+:root {
+  --event-bg-color: #f9f9f9;
+  --event-text-color: #333333;
+  --event-card-bg: #ffffff;
+  --event-card-shadow: rgba(0, 0, 0, 0.1);
+  --event-filter-bg: #ffffff;
+  --primary-color: #007bff;
+  --btn-hover-bg-color: #0056b3;
+}
+
+/* =====================================================
+        Dark Mode Variables for Event Section
+   (Applied when <body class="dark-mode"> is active)
+======================================================= */
+body.dark-mode {
+  --event-bg-color: #1e1e1e;
+  --event-text-color: #e0e0e0;
+  --event-card-bg: #2c2c2c;
+  --event-card-shadow: rgba(0, 0, 0, 0.5);
+  --event-filter-bg: #333333;
+  --primary-color: #0d6efd; /* Adjust as needed */
+  --btn-hover-bg-color: #0056b3;
+}
+
+.event-section {
+  background-color: var(--event-bg-color);
+  color: var(--event-text-color);
+  padding: 3rem 1rem;
+  min-height: 80vh;
+}
+
+.event-section-header {
+  max-width: 800px;
+  margin: 0 auto 2rem auto;
+  text-align: center;
+}
+
+.event-section-header h2 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.event-section-header p {
+  font-size: 1.125rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.event-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+    color: var(--text-color);
+}
+
+.event-card {
+      background: var(--event-card-bg);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px var(--event-card-shadow);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  position: relative;
+}
+
+.event-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 16px var(--event-card-shadow);
+}
+
+.event-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.event-card .event-content {
+  padding: 1rem;
+    color: var(--event-text-color);
+}
+
+.event-card h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1.4rem;
+    color: var(--event-text-color);
+}
+
+.event-card p {
+  margin-bottom: 0.5rem;
+    color: var(--event-text-color);
+}
+
+/* Countdown timer badge */
+.countdown {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #ff4500;
+  padding: 0.5rem;
+  border-radius: 5px;
+  color: #fff;
+  font-weight: bold;
+}
+
+/* ---------- Event Details ---------- */
+.event-details img {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.event-details h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.event-details p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.event-details button {
+  background: #28a745;
+  color: #fff;
+  padding: 0.8rem 1.2rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: background 0.3s;
+  cursor: pointer;
+}
+
+.event-details button:hover {
+  background: #218838;
+}
+
+/* ---------- Ticket Booking Component ---------- */
+.ticket-booking {
+  margin-top: 2rem;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.ticket-booking h3 {
+  margin-bottom: 1rem;
+}
+
+.ticket-booking label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.ticket-booking input,
+.ticket-booking select {
+  padding: 0.5rem;
+  width: 100%;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.ticket-booking button {
+  background: #007bff;
+  color: #fff;
+  padding: 0.7rem 1rem;
+  border: none;
+  border-radius: 4px;
+}
+
+/* ---------- Social Share Buttons ---------- */
+.social-share {
+  margin-top: 1rem;
+}
+
+.social-share button {
+  background: #4267b2;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 0.8rem;
+  margin-right: 0.5rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.social-share button.twitter {
+  background: #1da1f2;
+}
+
+.social-share button.whatsapp {
+  background: #25d366;
+}
+
+.social-share button:hover {
+  opacity: 0.9;
+}
+
+/* ---------- Dashboard ---------- */
+.dashboard {
+  text-align: center;
+}
+
+.dashboard h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+/* ---------- Animations ---------- */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { transform: translateX(-50px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* ---------- Page Transition (example usage) ---------- */
+.page-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+.page-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---------- Dark Mode Overrides ---------- */
+body.dark-mode {
+  background: #121212;
+  color: #fff; /* Base dark text color */
+}
+
+/* Change background and text for main content area */
+body.dark-mode .content {
+  background: #1e1e1e;
+  color: #fff;
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+}
+
+/* Change background and text for auth containers */
+body.dark-mode .auth-container {
+  background: #1e1e1e;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+}
+
+/* Change background and text for event cards */
+body.dark-mode .event-card {
+  background: #2a2a2a;
+  color: #fff;
+}
+
+
+
+
+
+
+
+
+
+/* Footer Styling */
+.footer {
+  background: #222;
+  color: #fff;
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.footer-section {
+  flex: 1;
+  min-width: 200px;
+}
+
+.footer-section h4 {
+  margin-bottom: 1rem;
+}
+
+.footer-section ul {
+  list-style: none;
+}
+
+.footer-section ul li {
+  margin-bottom: 0.5rem;
+}
+
+.footer-section ul li a {
+  color: #bbb;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer-section ul li a:hover {
+  color: #ffd700;
+}
+
+.social-icons a {
+  font-size: 1.5rem;
+  margin: 0 10px;
+  color: #fff;
+  transition: transform 0.3s;
+}
+
+.social-icons a:hover {
+  transform: scale(1.2);
+}
+
+.footer-bottom {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #444;
+  font-size: 0.9rem;
+}
+
+
+
+/* ===============================
+   Navbar Container & Basic Setup
+=============================== */
+.navbar {
+  background-color: #1f2937; /* dark blue-gray */
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.nav-container {
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: #ffffff;
+  letter-spacing: 1px;
+}
+
+/* ===============================
+   Hamburger Menu (Mobile)
+=============================== */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.hamburger .bar {
+  display: block;
+  width: 25px;
+  height: 3px;
+  margin: 5px;
+  background-color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+/* ===============================
+   Navigation Menu
+=============================== */
+.nav-menu {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
+
+.nav-menu li {
+  margin-left: 20px;
+  position: relative;
+}
+
+.nav-menu li a {
+  text-decoration: none;
+  color: #ffffff;
+  font-size: 1rem;
+  transition: color 0.3s ease, background-color 0.3s ease;
+  padding: 5px 10px;
+  border-radius: 4px;
+}
+
+.nav-menu li a:hover {
+  background-color: #374151;
+}
+
+/* ===============================
+   Dropdown Menu for Events
+=============================== */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #374151;
+  list-style: none;
+  padding: 10px 0;
+  min-width: 150px;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+  z-index: 999;
+}
+
+.dropdown:hover .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+}
+
+.dropdown-menu li {
+  padding: 8px 16px;
+}
+
+.dropdown-menu li a {
+  color: #ffffff;
+  font-size: 0.9rem;
+}
+
+/* ===============================
+   Logout Button & Dark Mode Toggle
+=============================== */
+.logout-btn {
+  background-color: transparent;
+  border: 1px solid #ffffff;
+  color: #ffffff;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+  background-color: #374151;
+}
+
+.dark-mode-toggle {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 1.2rem;
+  margin-left: 20px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.dark-mode-toggle:hover {
+  transform: scale(1.1);
+}
+
+/* ===============================
+   Responsive Styles
+=============================== */
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+  }
+  
+  .nav-menu {
+    position: absolute;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    background-color: #1f2937;
+    flex-direction: column;
+    align-items: center;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+  }
+  
+  .nav-menu.active {
+    max-height: 300px;
+  }
+  
+  .nav-menu li {
+    margin: 15px 0;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+/* ************************************
+   Event Section Container & Header
+*************************************** */
+.event-section {
+  padding: 4rem 7rem;
+  background-color: #f9f9f9;
+  min-height: 80vh;
+}
+
+.event-section-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.event-section-header h2 {
+  margin-bottom: 0.5rem;
+  font-size: 2.5rem;
+  color: #333;
+}
+
+.event-section-header p {
+  font-size: 1.125rem;
+  color: #666;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* ************************************
+              Filters
+*************************************** */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.filters input,
+.filters select {
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  outline: none;
+  width: 250px;
+  max-width: 90%;
+  transition: border-color 0.3s;
+}
+
+.filters input:focus,
+.filters select:focus {
+  border-color: #007bff;
+}
+
+/* ************************************
+             Event Cards Grid
+*************************************** */
+.event-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.8rem;
+  padding: 0 1rem;
+}
+
+/* No events found text */
+.no-events {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #888;
+  grid-column: 1/-1;
+}
+
+/* ************************************
+   Responsive Adjustments
+*************************************** */
+@media (max-width: 768px) {
+  .event-section-header h2 {
+    font-size: 2rem;
+  }
+
+  .event-section-header p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .filters input,
+  .filters select {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+
+
+
+
+/* ===================================
+   Event Card Styling & Interactivity
+===================================== */
+
+.event-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.event-card {
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+}
+
+.event-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.event-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+/* ===================================
+   Card Content and Header
+===================================== */
+
+.event-card-content {
+  padding: 1rem;
+}
+
+.event-card-content .top-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.event-card-content h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.favorite-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.favorite-btn:hover {
+  transform: scale(1.1);
+}
+
+/* ===================================
+   Countdown and Reviews
+===================================== */
+
+/* Dynamic countdown can change color via inline style, but here we keep base style */
+.event-card-content p {
+  color: #555;
+  margin: 0.5rem 0;
+  font-size: 0.95rem;
+}
+
+/* Reviews container */
+.reviews {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+}
+
+.rating {
+  color: #ffd700; /* gold stars */
+  font-size: 1.1rem;
+}
+
+.toggle-reviews-btn {
+  background: transparent;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: color 0.3s;
+}
+
+.toggle-reviews-btn:hover {
+  color: #0056b3;
+}
+
+/* Expanded review details */
+.review-details {
+  padding: 0.5rem;
+  border-top: 1px solid #eee;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* ===================================
+   Action Buttons and Booking Confirmation
+===================================== */
+
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s;
+  flex: 1;
+  text-align: center;
+}
+
+.btn:hover {
+  background: #0056b3;
+}
+
+.share-btn {
+  background: #28a745;
+}
+
+.share-btn:hover {
+  background: #1e7e34;
+}
+
+/* Booking Confirmation message */
+.booking-confirmation {
+  margin-top: 1rem;
+  background: #d4edda;
+  color: #155724;
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 480px) {
+  .filters {
+    flex-direction: column;
+    padding: 0 1rem;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+}
+
+/* Additional Styling for New Buttons */
+.email-btn {
+  background: #17a2b8; /* Teal color */
+}
+
+.email-btn:hover {
+  background: #117a8b;
+}
+
+/* Ensure the share and email buttons have consistent styling */
+.action-buttons .btn {
+  flex: 1;
+  text-align: center;
+  margin: 0.25rem 0;
+}
+
+
+
+
+
+/* Contact form css */
+
+/* =====================================
+   CSS Variables for Light Mode (Default)
+======================================= */
+:root {
+  --bg-color: #ffffff;
+  --text-color: #333333;
+  --primary-color: #007bff;
+  --secondary-color: #f5f5f5;
+  --accent-color: #374151;
+  --card-bg-color: #ffffff;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --input-bg-color: #f9f9f9;
+  --input-border-color: #ccc;
+  --btn-bg-color: #007bff;
+  --btn-hover-bg-color: #0056b3;
+}
+
+/* =====================================
+     Dark Mode Variables
+   (Applied when <body class="dark-mode">)
+======================================= */
+body.dark-mode {
+  --bg-color: #121212;
+  --text-color: #e0e0e0;
+  --primary-color: #0d6efd;
+  --secondary-color: #1e1e1e;
+  --accent-color: #333333;
+  --card-bg-color: #2c2c2c;
+  --shadow-color: rgba(0, 0, 0, 0.5);
+  --input-bg-color: #333333;
+  --input-border-color: #555;
+  --btn-bg-color: #0d6efd;
+  --btn-hover-bg-color: #0056b3;
+}
+
+/* =====================================
+             Global Styles
+======================================= */
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  font-family: 'Arial', sans-serif;
+}
+
+/* =====================================
+    Contact Form Container
+======================================= */
+.contact-form-container {
+  max-width: 600px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background-color: var(--card-bg-color);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px var(--shadow-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.contact-form-container h2 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.contact-form-container p {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+}
+
+/* =====================================
+           Contact Form Styling
+======================================= */
+.contact-form .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.contact-form label {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.contact-form input[type="text"],
+.contact-form input[type="email"],
+.contact-form textarea {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid var(--input-border-color);
+  border-radius: 4px;
+  background-color: var(--input-bg-color);
+  color: var(--text-color);
+  transition: border-color 0.3s ease;
+}
+
+.contact-form input[type="text"]:focus,
+.contact-form input[type="email"]:focus,
+.contact-form textarea:focus {
+  border-color: var(--primary-color);
+  outline: none;
+}
+
+/* =====================================
+                Submit Button
+======================================= */
+.submit-btn {
+  background-color: var(--btn-bg-color);
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  width: 100%;
+}
+
+.submit-btn:hover {
+  background-color: var(--btn-hover-bg-color);
+  transform: translateY(-2px);
+}
+
+/* =====================================
+              Feedback Message
+======================================= */
+.feedback-msg {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 1rem;
+  color: var(--primary-color);
+}
+
+
+
+/* Dashboard */
+/* Container styles */
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+/* Sidebar styles */
+.dashboard-sidebar {
+  width: 250px;
+  background-color: #2c3e50;
+  padding: 20px;
+  color: white;
+}
+
+.dashboard-sidebar h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+.dashboard-sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.dashboard-sidebar ul li {
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.dashboard-sidebar ul li:hover,
+.dashboard-sidebar ul li.active {
+  background-color: #34495e;
+}
+
+/* Main content styles */
+.dashboard-main {
+  flex: 1;
+  padding: 30px;
+  background-color: #ecf0f1;
+}
+
+/* Common tab content styling */
+.tab-content h2 {
+  margin-bottom: 20px;
+}
+
+/* Card styling for overview and other sections */
+.card {
+  background: white;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Table styling */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table,
+th,
+td {
+  border: 1px solid #bdc3c7;
+}
+
+th,
+td {
+  padding: 10px;
+  text-align: left;
+}
+
+/* Profile section styles */
+.profile-form label {
+  display: block;
+  margin-top: 10px;
+}
+
+.profile-form input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #bdc3c7;
+  border-radius: 4px;
+}
+
+.profile-form button {
+  margin-top: 15px;
+  padding: 10px 15px;
+  background-color: #27ae60;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.profile-form button:hover {
+  background-color: #219150;
+}
+
+.profile-info p {
+  margin: 8px 0;
+}
+
+.profile-info button {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background-color: #2980b9;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Notifications styles */
+.notifications-list {
+  list-style: none;
+  padding: 0;
+}
+
+.notifications-list li {
+  background: white;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.notifications-list li.unread {
+  border-left: 5px solid #e74c3c;
+}
+
+.notifications-list li.read {
+  border-left: 5px solid #2ecc71;
+}
+
+.notifications-list button {
+  padding: 5px 10px;
+  background-color: #95a5a6;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Settings styles */
+.settings-card {
+  background: white;
+  padding: 20px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.settings-card button {
+  padding: 10px 15px;
+  background-color: #8e44ad;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Dark mode example (when toggled, add a dark background and adjust colors) */
+body.dark-mode {
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
+
+
+
+
+
+
+
+
+.seat-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.seat-modal-content {
+  background: white;
+  padding: 20px;
+  width: 90%;
+  max-width: 700px;
+  border-radius: 8px;
+  position: relative;
+  text-align: center;
+}
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  font-size: 18px;
+  border: none;
+  cursor: pointer;
+}
+.seat-grid {
+  display: inline-block;
+  margin: 20px 0;
+}
+.seat-row {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 5px;
+}
+.seat {
+  width: 50px;
+  height: 50px;
+  margin: 3px;
+  border: 1px solid #333;
+  line-height: 50px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.seat.available {
+  background-color: #f0f0f0;
+}
+.seat.unavailable {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+.seat.selected {
+  background-color: #8bc34a;
+  color: white;
+  font-weight: bold;
+}
+.seat-actions {
+  margin: 10px 0;
+}
+.ar-view {
+  margin: 20px 0;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 4px;
+}
+.confirm-btn {
+  margin-top: 10px;
+}
+
+
+
+
+.auth-container {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.auth-container form input {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  box-sizing: border-box;
+}
+
+.auth-container button {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.google-btn {
+  background-color: #4285F4;
+  color: white;
+  font-weight: bold;
+}
+
+.google-btn:hover {
+  background-color: #357ae8;
+}
+
+.error {
+  color: red;
+}
+
+
+
+.about-container {
+  max-width: 1000px;
+  margin: 50px auto;
+  text-align: center;
+  padding: 20px;
+}
+
+.about-header {
+  background-color: #2c3e50;
+  color: white;
+  padding: 40px;
+  border-radius: 10px;
+}
+
+.about-header h1 {
+  font-size: 28px;
+}
+
+.about-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin-top: 40px;
+}
+
+.about-text {
+  max-width: 500px;
+  text-align: left;
+  margin-right: 20px;
+}
+
+.about-text h2 {
+  color: #2980b9;
+  font-size: 22px;
+  margin-top: 20px;
+}
+
+.about-text ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.about-text li {
+  font-size: 18px;
+  margin: 10px 0;
+  padding-left: 20px;
+  position: relative;
+}
+
+.about-text li::before {
+  content: "✔️";
+  color: #27ae60;
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+}
+
+.about-image img {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.about-cta {
+  margin-top: 40px;
+  padding: 30px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+}
+
+.about-cta button {
+  padding: 10px 20px;
+  font-size: 18px;
+  background-color: #e67e22;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.about-cta button:hover {
+  background-color: #d35400;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .about-content {
+    flex-direction: column;
+  }
+
+  .about-text {
+    text-align: center;
+    margin-right: 0;
+  }
+}
+
+
+
+
+
+
+/* CSS Variables for Theming */
+:root {
+  --sidebar-bg: #2c3e50;
+  --sidebar-hover: #34495e;
+  --main-bg: #ecf0f1;
+  --card-bg: #ffffff;
+  --text-color: #333;
+  --accent-color: #2980b9;
+  --btn-bg: #e67e22;
+  --btn-hover: #d35400;
+}
+
+body.dark-mode {
+  --sidebar-bg: #1f1f1f;
+  --sidebar-hover: #333;
+  --main-bg: #121212;
+  --card-bg: #1e1e1e;
+  --text-color: #f1f1f1;
+  --accent-color: #9b59b6;
+  --btn-bg: #9b59b6;
+  --btn-hover: #8e44ad;
+}
+
+/* Container styling */
+.admin-dashboard-container {
+  display: flex;
+  min-height: 100vh;
+  font-family: "Arial", sans-serif;
+  background-color: var(--main-bg);
+  color: var(--text-color);
+}
+
+/* Sidebar Navigation */
+.admin-sidebar {
+  width: 250px;
+  background-color: var(--sidebar-bg);
+  padding: 20px;
+  color: white;
+}
+
+.admin-sidebar h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+.sidebar-menu {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar-menu li {
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.sidebar-menu li:hover,
+.sidebar-menu li.active {
+  background-color: var(--sidebar-hover);
+}
+
+/* Main Content Area */
+.admin-main {
+  flex: 1;
+  padding: 30px;
+  background-color: var(--main-bg);
+}
+
+/* Fade-in animation for tab content */
+.fade-in {
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Card container for overview statistics */
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.card {
+  background-color: var(--card-bg);
+  flex: 1;
+  min-width: 150px;
+  padding: 20px;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card h3 {
+  margin-bottom: 10px;
+  color: var(--accent-color);
+}
+
+/* Data Table Styling */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.data-table th,
+.data-table td {
+  padding: 12px;
+  border: 1px solid #bdc3c7;
+  text-align: left;
+}
+
+.data-table th {
+  background-color: var(--sidebar-hover);
+  color: #fff;
+}
+
+/* Settings Card */
+.settings-card {
+  background-color: var(--card-bg);
+  padding: 20px;
+  border-radius: 6px;
+  max-width: 400px;
+  margin-top: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.settings-btn {
+  padding: 10px 20px;
+  margin-top: 15px;
+  background-color: var(--btn-bg);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.settings-btn:hover {
+  background-color: var(--btn-hover);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .admin-dashboard-container {
+    flex-direction: column;
+  }
+
+  .admin-sidebar {
+    width: 100%;
+  }
+
+  .admin-main {
+    padding: 20px;
+  }
+
+  .card-container {
+    flex-direction: column;
+  }
+}
+
