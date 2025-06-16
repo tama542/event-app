@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-//import "./AdminDashboard.css";
+import EventCard from "./EventCard";
+
+// import "./AdminDashboard.css";
 
 function AdminDashboard() {
-  // Simulated data arrays
-
-  // Users data for the "Users" tab
+  // Simulated users data
   const [users] = useState([
     { id: 1, name: "Benard Johnson", email: "benard@gmail.com", role: "user" },
     { id: 2, name: "Lisa Muthoni", email: "lisa@gmail.com", role: "user" },
@@ -12,19 +12,67 @@ function AdminDashboard() {
     { id: 4, name: "Tama Nzavi", email: "tama@gmail.com", role: "user" },
   ]);
 
-  // Events data for the "Events" and "Tickets" tab
-  const [events] = useState([
-    { id: 1, name: "Rock Festival", date: "2025-08-01", ticketsSold: 150 },
-    { id: 2, name: "Summer Concert", date: "2025-07-15", ticketsSold: 200 },
-    { id: 3, name: "Art Expo", date: "2025-09-10", ticketsSold: 90 },
-    { id: 4, name: "Tech Conference", date: "2025-10-05", ticketsSold: 120 },
+  // Events state—new events will be appended here.
+  const [events, setEvents] = useState([
+    {
+      id: 1,
+      title: "Rock Festival",
+      description: "Join us for an evening of rock music!",
+      date: "2025-08-01",
+      image: "https://via.placeholder.com/400x300?text=Rock+Festival",
+      rating: 4,
+      reviews: 12,
+    },
+    {
+      id: 2,
+      title: "Summer Concert",
+      description: "Enjoy the summer vibes with live music.",
+      date: "2025-07-15",
+      image: "https://via.placeholder.com/400x300?text=Summer+Concert",
+      rating: 5,
+      reviews: 20,
+    },
   ]);
 
-  // Manage active tab state; additional tabs added for Tickets & Events.
+  // Active tab: overview, tickets, events, createEvent, users, settings
   const [activeTab, setActiveTab] = useState("overview");
 
-  // Calculate total tickets sold from the events data
-  const totalTicketsSold = events.reduce((total, evt) => total + evt.ticketsSold, 0);
+  // Form state variables for creating events
+  const [newTitle, setNewTitle] = useState("");
+  const [newDescription, setNewDescription] = useState("");
+  const [newDate, setNewDate] = useState("");
+  const [newImage, setNewImage] = useState("");
+  const [formError, setFormError] = useState("");
+
+  // Calculate total tickets sold from events data (if applicable)
+  // For demonstration purposes, assume each event has a static ticket count.
+  const totalTicketsSold = events.reduce((total, evt) => total + (evt.ticketsSold || 0), 0);
+
+  const handleCreateEvent = (e) => {
+    e.preventDefault();
+    if (!newTitle.trim() || !newDate.trim() || !newDescription.trim() || !newImage.trim()) {
+      setFormError("All fields are required.");
+      return;
+    }
+    const newEvent = {
+      id: events.length ? events[events.length - 1].id + 1 : 1,
+      title: newTitle,
+      description: newDescription,
+      date: newDate,
+      image: newImage,
+      rating: 0,
+      reviews: 0,
+    };
+    setEvents([...events, newEvent]);
+    // Clear form and error.
+    setNewTitle("");
+    setNewDescription("");
+    setNewDate("");
+    setNewImage("");
+    setFormError("");
+    // Switch to the Events tab.
+    setActiveTab("events");
+  };
 
   // Render content based on the active tab.
   const renderTabContent = () => {
@@ -64,9 +112,9 @@ function AdminDashboard() {
               <tbody>
                 {events.map((evt) => (
                   <tr key={evt.id}>
-                    <td>{evt.name}</td>
+                    <td>{evt.title}</td>
                     <td>{evt.date}</td>
-                    <td>{evt.ticketsSold}</td>
+                    <td>{evt.ticketsSold || 0}</td>
                   </tr>
                 ))}
               </tbody>
@@ -76,27 +124,62 @@ function AdminDashboard() {
       case "events":
         return (
           <div className="admin-tab-content fade-in">
-            <h2>Event Details</h2>
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Event Name</th>
-                  <th>Date</th>
-                  <th>Tickets Sold</th>
-                </tr>
-              </thead>
-              <tbody>
-                {events.map((evt) => (
-                  <tr key={evt.id}>
-                    <td>{evt.id}</td>
-                    <td>{evt.name}</td>
-                    <td>{evt.date}</td>
-                    <td>{evt.ticketsSold}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <h2>Event Gallery</h2>
+            <div className="event-grid">
+              {events.map((evt) => (
+                <EventCard key={evt.id} event={evt} />
+              ))}
+            </div>
+          </div>
+        );
+      case "createEvent":
+        return (
+          <div className="admin-tab-content fade-in">
+            <h2>Create New Event</h2>
+            <form className="create-event-form" onSubmit={handleCreateEvent}>
+              {formError && <p className="error-message">{formError}</p>}
+              <div className="form-group">
+                <label htmlFor="eventTitle">Title</label>
+                <input
+                  type="text"
+                  id="eventTitle"
+                  value={newTitle}
+                  onChange={(e) => setNewTitle(e.target.value)}
+                  placeholder="Enter event title"
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="eventDescription">Description</label>
+                <textarea
+                  id="eventDescription"
+                  value={newDescription}
+                  onChange={(e) => setNewDescription(e.target.value)}
+                  placeholder="Enter event description"
+                ></textarea>
+              </div>
+              <div className="form-group">
+                <label htmlFor="eventDate">Event Date</label>
+                <input
+                  type="date"
+                  id="eventDate"
+                  value={newDate}
+                  onChange={(e) => setNewDate(e.target.value)}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="eventImage">Image URL</label>
+                <input
+                  type="text"
+                  id="eventImage"
+                  value={newImage}
+                  onChange={(e) => setNewImage(e.target.value)}
+                  placeholder="Enter image URL"
+                />
+              </div>
+              <button type="submit" className="create-event-btn">
+                Create Event
+              </button>
+            </form>
           </div>
         );
       case "users":
@@ -151,44 +234,32 @@ function AdminDashboard() {
 
   return (
     <div className="admin-dashboard-container">
-      {/* Sidebar Navigation */}
       <div className="admin-sidebar">
         <h2>Admin Dashboard</h2>
         <ul className="sidebar-menu">
-          <li
-            className={activeTab === "overview" ? "active" : ""}
-            onClick={() => setActiveTab("overview")}
-          >
+          <li className={activeTab === "overview" ? "active" : ""} onClick={() => setActiveTab("overview")}>
             Overview
           </li>
-          <li
-            className={activeTab === "tickets" ? "active" : ""}
-            onClick={() => setActiveTab("tickets")}
-          >
+          <li className={activeTab === "tickets" ? "active" : ""} onClick={() => setActiveTab("tickets")}>
             Tickets
           </li>
-          <li
-            className={activeTab === "events" ? "active" : ""}
-            onClick={() => setActiveTab("events")}
-          >
+          <li className={activeTab === "events" ? "active" : ""} onClick={() => setActiveTab("events")}>
             Events
           </li>
-          <li
-            className={activeTab === "users" ? "active" : ""}
-            onClick={() => setActiveTab("users")}
-          >
+          <li className={activeTab === "createEvent" ? "active" : ""} onClick={() => setActiveTab("createEvent")}>
+            Create Event
+          </li>
+          <li className={activeTab === "users" ? "active" : ""} onClick={() => setActiveTab("users")}>
             Users
           </li>
-          <li
-            className={activeTab === "settings" ? "active" : ""}
-            onClick={() => setActiveTab("settings")}
-          >
+          <li className={activeTab === "settings" ? "active" : ""} onClick={() => setActiveTab("settings")}>
             Settings
           </li>
         </ul>
       </div>
-      {/* Main Content Area */}
-      <div className="admin-main">{renderTabContent()}</div>
+      <div className="admin-main">
+        {renderTabContent()}
+      </div>
     </div>
   );
 }

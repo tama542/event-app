@@ -13,6 +13,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import AdminRoute from "./components/AdminRoute";
 import Footer from "./components/Footer";
 import AboutUs from "./pages/About";
+import RatingStars from "./pages/RatingStars";
 
 function App() {
   return (
@@ -70,6 +71,14 @@ function App() {
             element={
               <PrivateRoute>
                 <AboutUs />
+              </PrivateRoute>
+            }
+          />
+            <Route
+            path="/ratingstars"
+            element={
+              <PrivateRoute>
+                <RatingStars />
               </PrivateRoute>
             }
           />

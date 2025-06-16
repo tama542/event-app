@@ -11,10 +11,9 @@ app.use(cors()); // Allow cross-origin requests from your front-end
 // Safaricom credentials (replace these placeholders)
 const consumerKey = "Qd7aZUxfdzBG5tedv8HVOGdKdhIa8HLYIp95EAON7G2nAP61";
 const consumerSecret = "AUsKKHXCOwjGCX1IDdCc5q2GezGzo5quaVUAhBp0VUq6U8vfOhTFWc4WBcOADFgC";
-const shortCode = "174379"; // e.g. 174379 for sandbox
+const shortCode = "174379"; 
 const passkey = "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919";
-const callbackURL = "https://mydomain.com/path"; // For real environment, or you can use a testing URL
-
+const callbackURL = "https://mydomain.com/path";
 // Function to generate the access token from Safaricom Daraja
 const generateAccessToken = async () => {
   const auth = Buffer.from(`${consumerKey}:${consumerSecret}`).toString("base64");
