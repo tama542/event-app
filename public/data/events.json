@@ -1,0 +1,21 @@
+[
+  {
+    "id": 1,
+    "name": "Summer Jazz Fest",
+    "date": "2025-07-10T19:00:00Z",
+    "price": 25,
+    "category": "Music",
+    "img": "/images/jazz.jpg",
+    "description": "An evening of smooth jazz by the lake."
+  },
+  {
+    "id": 2,
+    "name": "Tech Innovators Conference",
+    "date": "2025-08-05T09:00:00Z",
+    "price": 99,
+    "category": "Tech",
+    "img": "/images/tech.jpg",
+    "description": "Join the brightest minds in AI, web3 & robotics."
+  }
+  
+]
