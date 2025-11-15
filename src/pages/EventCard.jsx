@@ -167,7 +167,7 @@ const EventCard = () => {
 
   return (
     <motion.div className="event-card" whileHover={{ scale: 1.02 }}>
-      <img src={image} alt={title} className="event-image" />
+      <img src="public/pic/culture.jpg" alt={title} className="event-image" />
 
       <div className="event-card-content">
         <div className="top-header">

@@ -6,15 +6,18 @@ const cors = require("cors");
 
 const app = express();
 app.use(bodyParser.json());
-app.use(cors()); // Allow cross-origin requests from your front-end
+app.use(cors());
 
-// Safaricom credentials (replace these placeholders)
+// Safaricom credentials
 const consumerKey = "Qd7aZUxfdzBG5tedv8HVOGdKdhIa8HLYIp95EAON7G2nAP61";
 const consumerSecret = "AUsKKHXCOwjGCX1IDdCc5q2GezGzo5quaVUAhBp0VUq6U8vfOhTFWc4WBcOADFgC";
 const shortCode = "174379"; 
 const passkey = "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919";
-const callbackURL = "https://mydomain.com/path";
-// Function to generate the access token from Safaricom Daraja
+
+// FIXED: Use a local callback URL for development
+const callbackURL = "https://your-ngrok-url.ngrok.io/callback"; // You'll need to set this up
+
+// Function to generate the access token
 const generateAccessToken = async () => {
   const auth = Buffer.from(`${consumerKey}:${consumerSecret}`).toString("base64");
   try {
@@ -28,7 +31,7 @@ const generateAccessToken = async () => {
     );
     return response.data.access_token;
   } catch (error) {
-    console.error("Error generating access token", error.response.data);
+    console.error("Error generating access token", error.response?.data || error.message);
     throw new Error("Could not generate access token.");
   }
 };
@@ -37,16 +40,21 @@ const generateAccessToken = async () => {
 app.post("/stkpush", async (req, res) => {
   const { amount, phoneNumber, accountReference, transactionDesc } = req.body;
 
-  // Additional validations could be added here (e.g., checking valid phone number)
-  try {
-    // Generate access token
-    const accessToken = await generateAccessToken();
+  // Input validation
+  if (!amount || !phoneNumber) {
+    return res.status(400).json({ error: "Amount and phone number are required" });
+  }
 
-    // Prepare timestamp and password as required by Daraja
-    const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, "").slice(0, 14); // Format: yyyymmddhhmmss
+  // Validate phone number format
+  if (!phoneNumber.startsWith('254') || phoneNumber.length !== 12) {
+    return res.status(400).json({ error: "Invalid phone number format. Use 2547XXXXXXXX" });
+  }
+
+  try {
+    const accessToken = await generateAccessToken();
+    const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, "").slice(0, 14);
     const password = Buffer.from(shortCode + passkey + timestamp).toString("base64");
 
-    // Build the STK push request payload
     const stkPushRequest = {
       BusinessShortCode: shortCode,
       Password: password,
@@ -61,7 +69,8 @@ app.post("/stkpush", async (req, res) => {
       TransactionDesc: transactionDesc || "Ticket Payment"
     };
 
-    // Call the Daraja API endpoint for STK push
+    console.log("Sending STK Push request:", stkPushRequest);
+
     const response = await axios.post(
       "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest",
       stkPushRequest,
@@ -73,17 +82,31 @@ app.post("/stkpush", async (req, res) => {
       }
     );
 
-    // Send the response from Safaricom back to the front-end
+    console.log("STK Push response:", response.data);
     res.status(200).json(response.data);
+
   } catch (error) {
-    console.error("STK Push Error:", error.response ? error.response.data : error);
-    res.status(500).json({ error: "Failed to initiate payment" });
+    console.error("STK Push Error:", error.response?.data || error.message);
+    res.status(500).json({ 
+      error: "Failed to initiate payment",
+      details: error.response?.data || error.message 
+    });
   }
 });
 
-// Start the server
+// Add callback endpoint to receive payment results
+app.post("/callback", (req, res) => {
+  console.log("Payment callback received:", req.body);
+  // Handle the payment result here
+  res.status(200).send("Callback received");
+});
+
+// Health check endpoint
+app.get("/", (req, res) => {
+  res.json({ message: "M-Pesa STK Push API is running" });
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Backend server listening on port ${PORT}`);
 });
-

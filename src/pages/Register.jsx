@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-//import 'src/styles/Register.css'; // Ensure you have the correct path to your CSS file
+//import 'src/styles/Register.css'; 
 
 
 // Replace the following object with your Firebase configuration
@@ -14,7 +14,6 @@ const firebaseConfig = {
     storageBucket: "tn-events-6d065.firebasestorage.app",
   messagingSenderId: "879311163304",
   appId: "1:879311163304:web:d50c73efe025234886179d",
-  // ... other config values as needed
 };
 
 // Initialize Firebase app and auth
