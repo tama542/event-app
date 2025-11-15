@@ -23,20 +23,21 @@ function AboutUs() {
             Our mission is to simplify ticket booking, enhance event discovery, and
             create memorable experiences for audiences and organizers alike. We blend innovation with convenience to ensure
             you never miss out on the events that matter most to you.
+            
           </p>
 
           <h2> Why Choose Us?</h2>
           <ul>
-            <li>✔️ Easy & Secure Ticket Booking</li>
-            <li>✔️ Personalized Event Recommendations</li>
-            <li>✔️ Real-Time Seat Selection & AR Venue Views</li>
-            <li>✔️ Instant Notifications & Exclusive Deals</li>
+            <li> Easy & Secure Ticket Booking</li>
+            <li> Personalized Event Recommendations</li>
+            <li> Real-Time Seat Selection & AR Venue Views</li>
+            <li> Instant Notifications & Exclusive Deals</li>
           </ul>
         </div>
 
-        <div className="about-image">
-          <img src="https://via.placeholder.com/500x300?text=TN+Events" alt="About TN Events" />
-        </div>
+        {/* <div className="about-image">
+          <img src="111" alt="About TN Events" />
+        </div> */}
       </div>
 
       <div className="about-cta">

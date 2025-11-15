@@ -1,10 +1,10 @@
+// src/components/EventCard.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import RatingStars from "./RatingStars";
+import { motion } from "framer-motion";
 
-// Seat-booking modal (unchanged except onConfirm → navigate)
 const SeatBookingModal = ({ onClose, onConfirm }) => {
-  // 5×5 grid with 80% availability
   const initialSeats = Array.from({ length: 5 }, (_, r) =>
     Array.from({ length: 5 }, (_, c) => ({
       id: `${r}-${c}`,
@@ -12,9 +12,9 @@ const SeatBookingModal = ({ onClose, onConfirm }) => {
     }))
   );
 
-  const [seats]        = useState(initialSeats);
+  const [seats] = useState(initialSeats);
   const [selectedSeat, setSelectedSeat] = useState(null);
-  const [showAR, setShowAR]             = useState(false);
+  const [showAR, setShowAR] = useState(false);
 
   const handleSeatClick = (seat) => {
     if (!seat.available) return alert("This seat is not available.");
@@ -23,10 +23,12 @@ const SeatBookingModal = ({ onClose, onConfirm }) => {
 
   return (
     <div className="seat-modal">
-      <div className="seat-modal-content">
-        <button className="close-button" onClick={onClose}>
-          X
-        </button>
+      <motion.div
+        className="seat-modal-content"
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+      >
+        <button className="close-button" onClick={onClose}>✕</button>
         <h2>Select Your Seat</h2>
 
         <div className="seat-grid">
@@ -35,12 +37,9 @@ const SeatBookingModal = ({ onClose, onConfirm }) => {
               {row.map((seat) => (
                 <div
                   key={seat.id}
-                  className={`seat ${
-                    seat.available ? "available" : "unavailable"
-                  } ${
-                    selectedSeat?.id === seat.id ? "selected" : ""
-                  }`}
+                  className={`seat ${seat.available ? "available" : "unavailable"} ${selectedSeat?.id === seat.id ? "selected" : ""}`}
                   onClick={() => handleSeatClick(seat)}
+                  title={`Seat ${seat.id}`}
                 >
                   {seat.id}
                 </div>
@@ -51,26 +50,16 @@ const SeatBookingModal = ({ onClose, onConfirm }) => {
 
         {selectedSeat && (
           <>
-            <p>
-              Selected: <strong>{selectedSeat.id}</strong>
-            </p>
-            <button
-              onClick={() => setShowAR(true)}
-              className="btn"
-            >
-              View 360° / AR Preview
+            <p>Selected: <strong>{selectedSeat.id}</strong></p>
+            <button onClick={() => setShowAR(true)} className="btn secondary">
+              🎥 View 360° / AR Preview
             </button>
           </>
         )}
 
         {showAR && (
           <div className="ar-view">
-            <button
-              className="close-button"
-              onClick={() => setShowAR(false)}
-            >
-              Close AR
-            </button>
+            <button className="close-button" onClick={() => setShowAR(false)}>✕</button>
             <h3>360° View Seat {selectedSeat.id}</h3>
             <img
               src={`https://via.placeholder.com/600x400?text=360+Seat+${selectedSeat.id}`}
@@ -81,76 +70,62 @@ const SeatBookingModal = ({ onClose, onConfirm }) => {
 
         <button
           onClick={() => {
-            if (!selectedSeat) {
-              alert("Please select a seat first.");
-              return;
-            }
+            if (!selectedSeat) return alert("Please select a seat first.");
             onConfirm(selectedSeat);
           }}
           className="btn confirm-btn"
         >
-          Confirm & Book
+          ✅ Confirm & Book
         </button>
-      </div>
+      </motion.div>
     </div>
   );
 };
 
-// Event details modal (unchanged)
 const EventDetailsModal = ({ event, onClose }) => (
   <div className="modal-overlay">
-    <div className="modal-content details-modal">
-      <button className="close-button" onClick={onClose}>
-        X
-      </button>
-      <img
-        src={event.image}
-        alt={event.title}
-        className="modal-image"
-      />
+    <motion.div
+      className="modal-content details-modal"
+      initial={{ y: -50, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+    >
+      <button className="close-button" onClick={onClose}>✕</button>
+      <img src={event.image} alt={event.title} className="modal-image" />
       <h2>{event.title}</h2>
       <p>{event.description}</p>
-      <p>
-        <strong>Date:</strong> {event.date}
-      </p>
+      <p><strong>Date:</strong> {event.date}</p>
       <div className="reviews">
-        <span className="rating">
-          {"⭐".repeat(event.rating)}
-        </span>
+        <RatingStars rating={event.rating} />
         <span>({event.reviews} reviews)</span>
       </div>
-      <button onClick={onClose} className="btn">
-        Close
-      </button>
-    </div>
+      <button onClick={onClose} className="btn">Close</button>
+    </motion.div>
   </div>
 );
 
 const EventCard = () => {
   const navigate = useNavigate();
-  const { id }   = useParams();
+  const { id } = useParams();
 
-  // TODO: fetch your event by `id` or grab from context/store
-  const event = {/* fetch based on id */}
-  // For demo we'll stub:
-  // const event = EVENTS.find(e => e.id === id);
+  // Stub event data (replace with fetch/store)
+  const event = {
+    id,
+    title: "Live Concert",
+    description: "An amazing night of music and fun.",
+    date: "2025-12-01T20:00:00",
+    image: "https://via.placeholder.com/600x300?text=Event+Image",
+    rating: 4,
+    reviews: 120,
+  };
 
-  const {
-    title,
-    description,
-    date,
-    image,
-    rating,
-    reviews,
-  } = event;
+  const { title, description, date, image, rating, reviews } = event;
 
-  const [timeLeft, setTimeLeft]       = useState("");
-  const [isFavorite, setIsFavorite]   = useState(false);
+  const [timeLeft, setTimeLeft] = useState("");
+  const [isFavorite, setIsFavorite] = useState(false);
   const [showReviews, setShowReviews] = useState(false);
-  const [showSeatModal, setShowSeatModal]     = useState(false);
+  const [showSeatModal, setShowSeatModal] = useState(false);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
 
-  // Countdown
   useEffect(() => {
     const target = new Date(date).getTime();
     const iv = setInterval(() => {
@@ -169,126 +144,72 @@ const EventCard = () => {
     return () => clearInterval(iv);
   }, [date]);
 
-  // On seat confirm, go to /payment
   const handleSeatConfirm = (selectedSeat) => {
-    const amount = 100; // your ticket price
+    const amount = 100;
     setShowSeatModal(false);
-
-    navigate("/payment", {
-      state: { event, selectedSeat, amount },
-    });
+    navigate("/payment", { state: { event, selectedSeat, amount } });
   };
 
   const toggleFavorite = () => setIsFavorite((f) => !f);
-  const toggleReviews  = () => setShowReviews((r) => !r);
+  const toggleReviews = () => setShowReviews((r) => !r);
 
   const shareEvent = async () => {
-    const shareData = {
-      title: `Event: ${title}`,
-      text: description,
-      url: window.location.href,
-    };
+    const shareData = { title: `Event: ${title}`, text: description, url: window.location.href };
     if (navigator.share) {
-      try {
-        await navigator.share(shareData);
-        alert("Shared!");
-      } catch {}
+      try { await navigator.share(shareData); alert("Shared!"); } catch {}
     } else {
       navigator.clipboard.writeText(window.location.href);
       alert("URL copied");
     }
   };
 
-  const sendEmailInvite = () => {
-    // keep your emailjs logic here
-  };
-
-  const countdownStyle =
-    timeLeft.startsWith("0d") || timeLeft === "Event Started!"
-      ? { color: "red", fontWeight: "bold" }
-      : {};
+  const countdownStyle = timeLeft.includes("Event Started") ? { color: "red", fontWeight: "bold" } : {};
 
   return (
-    <div className="event-card">
+    <motion.div className="event-card" whileHover={{ scale: 1.02 }}>
       <img src={image} alt={title} className="event-image" />
 
       <div className="event-card-content">
         <div className="top-header">
           <h3>{title}</h3>
-          <button
-            onClick={toggleFavorite}
-            className="favorite-btn"
-          >
+          <button onClick={toggleFavorite} className="favorite-btn">
             {isFavorite ? "❤️" : "🤍"}
           </button>
         </div>
 
         <p>{description}</p>
-        <p style={countdownStyle}>
-          <strong>Starts in:</strong> {timeLeft}
-        </p>
+        <p style={countdownStyle}><strong>Starts in:</strong> {timeLeft}</p>
 
         <div className="reviews">
-          <span className="rating">
-            {"⭐".repeat(rating)}
-          </span>
+          <RatingStars rating={rating} />
           <span>({reviews} reviews)</span>
-          <button
-            onClick={toggleReviews}
-            className="toggle-reviews-btn"
-          >
+          <button onClick={toggleReviews} className="toggle-reviews-btn">
             {showReviews ? "Hide" : "Show"} Reviews
           </button>
         </div>
 
         {showReviews && (
-          <div className="review-details">
+          <motion.div className="review-details" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <p>"Great event!" - Mark</p>
             <p>"An unforgettable time!" - Nancy</p>
-          </div>
+          </motion.div>
         )}
 
         <div className="action-buttons">
-          <button
-            onClick={() => setShowSeatModal(true)}
-            className="btn"
-          >
-            RSVP / Book Now
-          </button>
-          <button
-            onClick={shareEvent}
-            className="btn share-btn"
-          >
-            Share
-          </button>
-          <button
-            onClick={sendEmailInvite}
-            className="btn email-btn"
-          >
-            Email Invite
-          </button>
-          <button
-            onClick={() => setShowDetailsModal(true)}
-            className="btn details-btn"
-          >
-            Details
-          </button>
+          <button onClick={() => setShowSeatModal(true)} className="btn primary">🎟️ RSVP / Book Now</button>
+          <button onClick={shareEvent} className="btn secondary">🔗 Share</button>
+          <button onClick={() => alert("Email invite feature coming soon!")} className="btn secondary">📧 Email Invite</button>
+          <button onClick={() => setShowDetailsModal(true)} className="btn secondary">ℹ️ Details</button>
         </div>
       </div>
 
       {showSeatModal && (
-        <SeatBookingModal
-          onClose={() => setShowSeatModal(false)}
-          onConfirm={handleSeatConfirm}
-        />
+        <SeatBookingModal onClose={() => setShowSeatModal(false)} onConfirm={handleSeatConfirm} />
       )}
       {showDetailsModal && (
-        <EventDetailsModal
-          event={event}
-          onClose={() => setShowDetailsModal(false)}
-        />
+        <EventDetailsModal event={event} onClose={() => setShowDetailsModal(false)} />
       )}
-    </div>
+    </motion.div>
   );
 };
 

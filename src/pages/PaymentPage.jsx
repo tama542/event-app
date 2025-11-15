@@ -1,7 +1,8 @@
 // src/PaymentPage.js
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
-//import mpesaLogo from "./mpesa.png"; // download official PNG
+//import mpesaLogo from "./mpesa.png";        // your official M-Pesa logo
+//import "./PaymentPage.css";               
 
 export default function PaymentPage() {
   const { state } = useLocation();
@@ -10,7 +11,6 @@ export default function PaymentPage() {
   const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // guard: redirect home if no booking info
   if (!event || !selectedSeat) {
     navigate("/");
     return null;
@@ -33,7 +33,7 @@ export default function PaymentPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "STK Push failed");
       alert("STK Push initiated! Please approve on your phone.");
-      navigate("/");  // or to a “Thank you” page
+      navigate("/");
     } catch (err) {
       console.error(err);
       alert("Payment error: " + err.message);
@@ -45,10 +45,14 @@ export default function PaymentPage() {
   return (
     <div className="payment-page">
       <div className="payment-card">
-        <img src="pic/image.png" className="mpesa-logo" alt="M-Pesa" />
+        <img src="pic\image.png" className="mpesa-logo" alt="M-Pesa" />
         <h2>Pay for {event.title}</h2>
-        <p>Seat: <strong>{selectedSeat.id}</strong></p>
-        <p>Amount: <strong>KES {amount}</strong></p>
+        <p>
+          Seat: <strong>{selectedSeat.id}</strong>
+        </p>
+        <p>
+          Amount: <strong>KES {amount}</strong>
+        </p>
         <form onSubmit={submitPayment}>
           <label>
             Phone Number
@@ -56,7 +60,7 @@ export default function PaymentPage() {
               type="tel"
               placeholder="2547XXXXXXXX"
               value={phone}
-              onChange={e => setPhone(e.target.value)}
+              onChange={(e) => setPhone(e.target.value)}
               required
             />
           </label>

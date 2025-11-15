@@ -1,27 +1,21 @@
 // src/pages/Home.jsx
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  useCallback
-} from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
-//import "./Home.css";
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { motion } from "framer-motion";
 
 export default function Home() {
   // THEME TOGGLE
-  const [dark, setDark] = useState(
-    () => localStorage.getItem("tn-theme") === "dark"
-  );
+  const [dark, setDark] = useState(() => localStorage.getItem("tn-theme") === "dark");
   useEffect(() => {
-    document.documentElement.setAttribute(
-      "data-theme",
-      dark ? "dark" : "light"
-    );
+    document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
     localStorage.setItem("tn-theme", dark ? "dark" : "light");
   }, [dark]);
 
-  // LOAD DATA FROM STATIC JSON
+  // LOAD DATA
   const [events, setEvents] = useState([]);
   const [testimonials, setTestimonials] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -40,31 +34,31 @@ export default function Home() {
       .finally(() => setLoading(false));
   }, []);
 
-  // FAVORITES (localStorage)
+  // FAVORITES
   const [favs, setFavs] = useState(() =>
     JSON.parse(localStorage.getItem("tn-favs") || "[]")
   );
   const toggleFav = useCallback(
     id => {
-      const next = favs.includes(id)
-        ? favs.filter(x => x !== id)
-        : [...favs, id];
+      const next = favs.includes(id) ? favs.filter(x => x !== id) : [...favs, id];
       setFavs(next);
       localStorage.setItem("tn-favs", JSON.stringify(next));
+      toast(next.includes(id) ? "Added to favorites ❤️" : "Removed from favorites 💔");
     },
     [favs]
   );
 
-  // SEARCH & CATEGORY FILTER
+  // SEARCH & FILTER
   const [query, setQuery] = useState("");
   const cats = ["All", ...new Set(events.map(e => e.category))];
   const [cat, setCat] = useState("All");
-  const filtered = events.filter(e =>
-    e.name.toLowerCase().includes(query.toLowerCase()) &&
-    (cat === "All" || e.category === cat)
+  const filtered = events.filter(
+    e =>
+      e.name.toLowerCase().includes(query.toLowerCase()) &&
+      (cat === "All" || e.category === cat)
   );
 
-  // MODAL PREVIEW
+  // MODAL
   const [modal, setModal] = useState(null);
   const openModal = ev => setModal(ev);
   const closeModal = () => setModal(null);
@@ -81,7 +75,7 @@ export default function Home() {
     return () => obs.disconnect();
   }, []);
 
-  const Counter = ({ to, label }) => {
+  const Counter = ({ to, label, icon }) => {
     const [n, setN] = useState(0);
     useEffect(() => {
       if (!statsOn) return;
@@ -95,10 +89,11 @@ export default function Home() {
       return () => clearInterval(id);
     }, [statsOn, to]);
     return (
-      <div className="stat">
+      <motion.div className="stat" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+        <span className="icon">{icon}</span>
         <h3>{n.toLocaleString()}</h3>
         <p>{label}</p>
-      </div>
+      </motion.div>
     );
   };
 
@@ -107,36 +102,27 @@ export default function Home() {
 
   return (
     <div className="home">
-      <button
-        className="theme-toggle"
-        onClick={() => setDark(d => !d)}
-        aria-label="Toggle theme"
-      >
-        {dark ? "☀️ Light" : "🌙 Dark"}
-      </button>
-
       {/* HERO */}
       <section className="hero">
         <div className="hero-text">
-          <h1>TN events</h1>
-          <p>
-            Discover & book concerts, festivals, conferences and art shows in
-            seconds.
-          </p>
-          <Link to="/events" className="btn">
-            Browse All Events
-          </Link>
+          <motion.h1 initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }}>
+            TN Events
+          </motion.h1>
+          <p>Discover & book concerts, festivals, conferences and art shows.</p>
+          <Link to="/events" className="btn">Browse All Events</Link>
         </div>
-        <div className="hero-img">
-          <img src="/images/hero.jpg" alt="Crowd at concert" />
-        </div>
+        <Carousel autoPlay infiniteLoop showThumbs={false}>
+          <div><img src="/pic/summer.jpg" alt="Concert" /></div>
+          <div><img src="/pic/culture.jpg" alt="Festival" /></div>
+          <div><img src="/pic/tech-expo.jpg" alt="Conference" /></div>
+        </Carousel>
       </section>
 
       {/* STATS */}
       <section className="stats" ref={statRef}>
-        <Counter to={events.length} label="Upcoming Events" />
-        <Counter to={favs.length} label="Your Favorites" />
-        <Counter to={12000} label="Tickets Sold" />
+        <Counter to={events.length} label="Upcoming Events" icon="🎤" />
+        <Counter to={favs.length} label="Your Favorites" icon="⭐" />
+        <Counter to={12000} label="Tickets Sold" icon="🎟️" />
       </section>
 
       {/* FILTERS */}
@@ -149,9 +135,7 @@ export default function Home() {
         />
         <select value={cat} onChange={e => setCat(e.target.value)}>
           {cats.map(c => (
-            <option key={c} value={c}>
-              {c}
-            </option>
+            <option key={c} value={c}>{c}</option>
           ))}
         </select>
       </section>
@@ -159,7 +143,7 @@ export default function Home() {
       {/* EVENTS GRID */}
       <section className="events-grid">
         {filtered.map(e => (
-          <div key={e.id} className="event-card">
+          <motion.div key={e.id} className="event-card" whileHover={{ scale: 1.05 }}>
             <div className="img-wrap" onClick={() => openModal(e)}>
               <img src={e.img} alt={e.name} />
               <button
@@ -178,58 +162,116 @@ export default function Home() {
               <p className="meta">
                 {new Date(e.date).toLocaleDateString()} · {e.category}
               </p>
-              <p className="price">
-                {e.price > 0 ? `$${e.price}` : "Free"}
-              </p>
-              <Link to={`/events/${e.id}`} className="btn small">
-                Details
-              </Link>
+              <p className="price">{e.price > 0 ? `$${e.price}` : "Free"}</p>
+              <Link to={`/events/${e.id}`} className="btn small">Details</Link>
             </div>
-          </div>
+          </motion.div>
         ))}
-        {filtered.length === 0 && (
-          <p className="no-results">No events match your search.</p>
-        )}
+        {filtered.length === 0 && <p className="no-results">No events match your search.</p>}
       </section>
 
       {/* TESTIMONIALS */}
       <section className="testimonials">
         <h2>What People Say</h2>
-        <div className="tm-wrap">
+        <Carousel autoPlay infiniteLoop showThumbs={false} showStatus={false}>
           {testimonials.map(t => (
             <div key={t.id} className="tm-card">
               <p>“{t.text}”</p>
               <p className="author">— {t.author}</p>
             </div>
           ))}
+        </Carousel>
+      </section>
+
+      {/* ABOUT */}
+      <section className="about">
+        <motion.h2 initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+          About TN Events
+        </motion.h2>
+        <p>
+          TN Events is your trusted platform for discovering and booking the best concerts,
+          festivals, conferences, and art shows. We connect passionate audiences with
+          unforgettable experiences, making event discovery simple, exciting, and reliable.
+        </p>
+        <Link to="/about" className="btn">Learn More</Link>
+      </section>
+
+      {/* FEATURED CATEGORIES */}
+      <section className="categories">
+        <h2>Explore Categories</h2>
+        <div className="category-grid">
+          <div className="cat-card">🎶 Concerts</div>
+          <div className="cat-card">🎨 Art & Culture</div>
+          <div className="cat-card">💻 Tech & Business</div>
+          <div className="cat-card">🎉 Festivals</div>
         </div>
+      </section>
+
+      {/* PARTNERS */}
+      <section className="partners">
+        <h2>Our Partners</h2>
+        <div className="partner-logos">
+          <img src="/logos/partner1.png" alt="Partner 1" />
+          <img src="/logos/partner2.png" alt="Partner 2" />
+          <img src="/logos/partner3.png" alt="Partner 3" />
+        </div>
+      </section>
+
+      {/* NEWSLETTER */}
+      <section className="newsletter">
+        <h2>Stay Updated</h2>
+        <p>Subscribe to our newsletter and never miss an event.</p>
+        <form
+          className="newsletter-form"
+          onSubmit={e => {
+            e.preventDefault();
+            toast("Subscribed! 🎉");
+          }}
+        >
+          <input type="email" placeholder="Enter your email" required />
+          <button type="submit" className="btn">Subscribe</button>
+        </form>
+      </section>
+
+      {/* CTA FOOTER */}
+      <section className="cta-footer">
+        <motion.h2 initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }}>
+          Ready to Experience Something Amazing?
+        </motion.h2>
+        <Link to="/events" className="btn large">Book Your Next Event</Link>
       </section>
 
       {/* MODAL PREVIEW */}
       {modal && (
         <div className="modal-backdrop" onClick={closeModal}>
-          <div
+          <motion.div
             className="modal-content"
             onClick={e => e.stopPropagation()}
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
           >
-            <button className="modal-close" onClick={closeModal}>
-              ✕
-            </button>
+            <button className="modal-close" onClick={closeModal}>✕</button>
             <img src={modal.img} alt={modal.name} />
             <h3>{modal.name}</h3>
             <p className="meta">
               {new Date(modal.date).toLocaleString()} · {modal.category}
             </p>
             <p>{modal.description}</p>
-            <div className="map-placeholder">[ Map preview here ]</div>
-            <Link
-              to={`/events/${modal.id}`}
-              className="btn"
-              onClick={closeModal}
-            >
+            <div className="map-container">
+              <iframe
+                src={`https://www.google.com/maps?q=${encodeURIComponent(modal.location)}&output=embed`}
+                width="100%"
+                height="250"
+                style={{ border: 0 }}
+                allowFullScreen=""
+                loading="lazy"
+                title="Event location map"
+              ></iframe>
+            </div>
+            <Link to={`/events/${modal.id}`} className="btn" onClick={closeModal}>
               Book Tickets
             </Link>
-          </div>
+          </motion.div>
         </div>
       )}
     </div>
