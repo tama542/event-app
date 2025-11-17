@@ -43,7 +43,7 @@ function AboutUs() {
       <div className="about-cta">
         <h2>🎟️ Ready to Experience the Best Events?</h2>
         <p>Join thousands of event lovers and explore the most exciting happenings around you.</p>
-        <button>Discover Events</button>
+        <button onClick={"eventsection.jsx"}>Discover Events</button>
       </div>
     </div>
   );

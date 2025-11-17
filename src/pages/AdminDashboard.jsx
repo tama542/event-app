@@ -8,7 +8,7 @@ function AdminDashboard() {
   const [users] = useState([
     { id: 1, name: "Benard Johnson", email: "benard@gmail.com", role: "user" },
     { id: 2, name: "Lisa Muthoni", email: "lisa@gmail.com", role: "user" },
-    { id: 3, name: "Claie Muthoni", email: "claire@gmail.com", role: "admin" },
+    { id: 3, name: "Claie Muthoni", email: "q@gmail.com", role: "admin" },
     { id: 4, name: "Tama Nzavi", email: "tama@gmail.com", role: "user" },
   ]);
 

@@ -119,11 +119,11 @@ export default function Home() {
       </section>
 
       {/* STATS */}
-      <section className="stats" ref={statRef}>
+      {/* <section className="stats" ref={statRef}>
         <Counter to={events.length} label="Upcoming Events" icon="🎤" />
         <Counter to={favs.length} label="Your Favorites" icon="⭐" />
         <Counter to={12000} label="Tickets Sold" icon="🎟️" />
-      </section>
+      </section> */}
 
       {/* FILTERS */}
       <section className="filters">
@@ -211,9 +211,9 @@ export default function Home() {
       <section className="partners">
         <h2>Our Partners</h2>
         <div className="partner-logos">
-          <img src="/logos/partner1.png" alt="Partner 1" />
-          <img src="/logos/partner2.png" alt="Partner 2" />
-          <img src="/logos/partner3.png" alt="Partner 3" />
+          <img src="public/pic/patner.jpg" alt="Partner 1" />
+          <img src="public/pic/patner1.jpg" alt="Partner 2" />
+          <img src="public/pic/patner2.jpg" alt="Partner 3" />
         </div>
       </section>
 

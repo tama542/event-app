@@ -15,7 +15,7 @@ const shortCode = "174379";
 const passkey = "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919";
 
 // FIXED: Use a local callback URL for development
-const callbackURL = "https://your-ngrok-url.ngrok.io/callback"; // You'll need to set this up
+const callbackURL = "https://your-ngrok-url.ngrok.io/callback";
 
 // Function to generate the access token
 const generateAccessToken = async () => {

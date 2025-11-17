@@ -84,9 +84,16 @@ function Register() {
         <button type="submit">Register</button>
       </form>
       <hr style={{ margin: '20px 0' }} />
-      <button onClick={handleGoogleSignIn} className="google-btn">
-        Sign in with Google
-      </button>
+   <button onClick={handleGoogleSignIn} className="google-btn">
+  <img 
+    src="https://developers.google.com/identity/images/g-logo.png" 
+    alt="Google" 
+    className="google-logo"
+    width="18" 
+    height="18"
+  />
+  Sign in with Google
+</button>
     </div>
   );
 }
