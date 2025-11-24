@@ -91,6 +91,11 @@ function Navbar() {
                 </Link>
               </li>
               <li>
+                <Link to={handleLogout} className="logout-btn">
+                  Logout
+                </Link>
+              </li>
+              <li>
                 <button onClick={handleLogout} className="logout-btn">
                   Logout
                 </button>
