@@ -198,7 +198,19 @@ const EventCard = () => {
         <div className="action-buttons">
           <button onClick={() => setShowSeatModal(true)} className="btn primary">🎟️ RSVP / Book Now</button>
           <button onClick={shareEvent} className="btn secondary">🔗 Share</button>
-          <button onClick={() => alert("Email invite feature coming soon!")} className="btn secondary">📧 Email Invite</button>
+         <button
+  onClick={() => {
+    const subject = encodeURIComponent(`Invitation to ${event.title}`);
+    const body = encodeURIComponent(
+      `Hey,\n\nI’d love for you to join me at "${event.title}"!\n\nDetails:\n${event.description}\nDate: ${event.date}\n\nHere’s the link: ${window.location.href}\n\nHope to see you there!`
+    );
+    window.location.href = `mailto:?subject=${subject}&body=${body}`;
+  }}
+  className="btn secondary"
+>
+  📧 Email Invite
+</button>
+
           <button onClick={() => setShowDetailsModal(true)} className="btn secondary">ℹ️ Details</button>
         </div>
       </div>

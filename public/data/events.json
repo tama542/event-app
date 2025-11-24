@@ -12,9 +12,9 @@
     "id": 2,
     "name": "Tech Innovators Conference",
     "date": "2025-08-05T09:00:00Z",
-    "price": 99,
+    "price": 20,
     "category": "Tech",
-    "img": "/mages/tech.jpg",
+    "img": "/images/jazz.jpg",
     "description": "Join the brightest minds in AI, web3 & robotics."
   }
 
