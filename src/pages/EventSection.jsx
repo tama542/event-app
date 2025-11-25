@@ -1,9 +1,9 @@
-
+// src/components/EventSection.js
 import React, { useState } from "react";
 import EventCard from "./EventCard";
+import { motion } from "framer-motion";
 
 const EventSection = () => {
-  // Define a longer list of sample events across more categories
   const events = [
     {
       id: 1,
@@ -15,7 +15,6 @@ const EventSection = () => {
       reviews: 20,
       category: "Music",
       price: 40,
-
     },
     {
       id: 2,
@@ -25,7 +24,8 @@ const EventSection = () => {
       image: "/pic/tech-expo.jpg",
       rating: 5,
       reviews: 35,
-      category: "Tech"
+      category: "Tech",
+      price: 60,
     },
     {
       id: 3,
@@ -35,7 +35,8 @@ const EventSection = () => {
       image: "/pic/art.jpg",
       rating: 3,
       reviews: 15,
-      category: "Art"
+      category: "Art",
+      price: 25,
     },
     {
       id: 4,
@@ -45,7 +46,8 @@ const EventSection = () => {
       image: "/pic/food.jpg",
       rating: 4,
       reviews: 50,
-      category: "Food"
+      category: "Food",
+      price: 30,
     },
     {
       id: 5,
@@ -55,7 +57,8 @@ const EventSection = () => {
       image: "/pic/sports.jpg",
       rating: 5,
       reviews: 45,
-      category: "Sports"
+      category: "Sports",
+      price: 35,
     },
     {
       id: 6,
@@ -65,7 +68,8 @@ const EventSection = () => {
       image: "/pic/culture.jpg",
       rating: 4,
       reviews: 25,
-      category: "Culture"
+      category: "Culture",
+      price: 20,
     },
     {
       id: 7,
@@ -75,7 +79,8 @@ const EventSection = () => {
       image: "/pic/movie.jpg",
       rating: 4,
       reviews: 30,
-      category: "Entertainment"
+      category: "Entertainment",
+      price: 15,
     },
     {
       id: 8,
@@ -85,18 +90,15 @@ const EventSection = () => {
       image: "/pic/books.jpg",
       rating: 5,
       reviews: 40,
-      category: "Literature"
+      category: "Literature",
+      price: 10,
     }
   ];
 
-  // Define search and category filter states
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
-
-  // Categories includes All to show every event.
   const categories = ["All", "Music", "Tech", "Art", "Food", "Sports", "Culture", "Entertainment", "Literature"];
 
-  // Filter events based on search term and selected category.
   const filteredEvents = events.filter((event) => {
     return (
       (selectedCategory === "All" || event.category === selectedCategory) &&
@@ -118,10 +120,12 @@ const EventSection = () => {
           placeholder="Search events..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          className="search-input"
         />
         <select
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
+          className="category-select"
         >
           {categories.map((cat, index) => (
             <option key={index} value={cat}>
@@ -131,13 +135,16 @@ const EventSection = () => {
         </select>
       </div>
 
-      <div className="event-cards">
+      <motion.div 
+        className="event-cards"
+        layout
+      >
         {filteredEvents.length > 0 ? (
           filteredEvents.map((event) => <EventCard key={event.id} event={event} />)
         ) : (
-          <p className="no-events">No events found.</p>
+          <p className="no-events">No events found. Try adjusting your search or filters.</p>
         )}
-      </div>
+      </motion.div>
     </section>
   );
 };

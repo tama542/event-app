@@ -4,40 +4,6 @@ import { useNavigate } from "react-router-dom";
 import RatingStars from "./RatingStars";
 import { motion } from "framer-motion";
 
-// Mock events data - replace this with actual API call or context
-const mockEvents = [
-  {
-    id: "1",
-    title: "Live Concert",
-    description: "An amazing night of music and fun.",
-    date: "2025-12-01T20:00:00",
-    image: "https://via.placeholder.com/600x300?text=Concert+Event",
-    rating: 4,
-    reviews: 120,
-    price: 75
-  },
-  {
-    id: "2",
-    title: "Art Exhibition",
-    description: "Contemporary art from local artists.",
-    date: "2025-11-15T10:00:00",
-    image: "https://via.placeholder.com/600x300?text=Art+Exhibition",
-    rating: 4.5,
-    reviews: 89,
-    price: 25
-  },
-  {
-    id: "3",
-    title: "Food Festival",
-    description: "Taste the best local and international cuisine.",
-    date: "2025-12-10T12:00:00",
-    image: "https://via.placeholder.com/600x300?text=Food+Festival",
-    rating: 4.2,
-    reviews: 156,
-    price: 40
-  }
-];
-
 const EventDetailsModal = ({ event, onClose }) => (
   <div className="modal-overlay" onClick={onClose}>
     <motion.div
@@ -62,9 +28,8 @@ const EventDetailsModal = ({ event, onClose }) => (
   </div>
 );
 
-const EventCard = ({ event, showAll = false }) => {
+const EventCard = ({ event }) => {
   const navigate = useNavigate();
-
   const { title, description, date, image, rating, reviews, price, id } = event;
 
   const [timeLeft, setTimeLeft] = useState("");
@@ -91,15 +56,12 @@ const EventCard = ({ event, showAll = false }) => {
   }, [date]);
 
   const handleBookNow = () => {
-    // Direct navigation to payment without seat selection
-   
-       navigate("/payment", { 
-    state: { 
-      event: event,
-      amount: event.price || 100, // Use event price or default
-      bookingReference: `EVT-${event.id}-${Date.now()}`,
-    }
-      
+    navigate("/payment", { 
+      state: { 
+        event: event,
+        amount: event.price || 100,
+        bookingReference: `EVT-${event.id}-${Date.now()}`,
+      }
     });
   };
 
@@ -131,7 +93,7 @@ const EventCard = ({ event, showAll = false }) => {
   return (
     <motion.div 
       className="event-card" 
-      whileHover={{ scale: showAll ? 1.02 : 1 }}
+      whileHover={{ scale: 1.02 }}
       layout
     >
       <img src={image} alt={title} className="event-image" />
@@ -145,7 +107,7 @@ const EventCard = ({ event, showAll = false }) => {
         </div>
 
         <p className="event-description">
-          {showAll ? description : `${description.substring(0, 100)}...`}
+          {description}
         </p>
         
         <p style={countdownStyle}>
@@ -219,72 +181,4 @@ const EventCard = ({ event, showAll = false }) => {
   );
 };
 
-// Main Events Section Component
-const EventsSection = () => {
-  const [events] = useState(mockEvents);
-  const [selectedCategory, setSelectedCategory] = useState("all");
-
-  // In a real app, you would fetch events from an API
-  // useEffect(() => {
-  //   const fetchEvents = async () => {
-  //     try {
-  //       const response = await fetch('/api/events');
-  //       const eventsData = await response.json();
-  //       setEvents(eventsData);
-  //     } catch (error) {
-  //       console.error('Error fetching events:', error);
-  //     }
-  //   };
-  //   fetchEvents();
-  // }, []);
-
-  return (
-    <div className="events-section">
-      <div className="events-header">
-        <h2>Upcoming Events</h2>
-        <div className="category-filters">
-          <button 
-            className={selectedCategory === "all" ? "active" : ""}
-            onClick={() => setSelectedCategory("all")}
-          >
-            All Events
-          </button>
-          <button 
-            className={selectedCategory === "music" ? "active" : ""}
-            onClick={() => setSelectedCategory("music")}
-          >
-            Music
-          </button>
-          <button 
-            className={selectedCategory === "art" ? "active" : ""}
-            onClick={() => setSelectedCategory("art")}
-          >
-            Art
-          </button>
-          <button 
-            className={selectedCategory === "food" ? "active" : ""}
-            onClick={() => setSelectedCategory("food")}
-          >
-            Food
-          </button>
-        </div>
-      </div>
-
-      <motion.div 
-        className="events-grid"
-        layout
-      >
-        {events.map((event) => (
-          <EventCard 
-            key={event.id} 
-            event={event} 
-            showAll={true}
-          />
-        ))}
-      </motion.div>
-    </div>
-  );
-};
-
 export default EventCard;
-// export { EventCard }; // Export individual card if needed elsewhere
