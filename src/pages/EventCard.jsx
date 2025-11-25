@@ -22,15 +22,15 @@ const SeatBookingModal = ({ onClose, onConfirm }) => {
   };
 
   return (
-    <div className="seat-modal">
-      <motion.div
-        className="seat-modal-content"
-        initial={{ scale: 0.8, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
+     <div className="seat-modal">
+    //   <motion.div
+    //     className="seat-modal-content"
+    //     initial={{ scale: 0.8, opacity: 0 }}
+    //     animate={{ scale: 1, opacity: 1 }}
       >
-        <button className="close-button" onClick={onClose}>✕</button>
-        <h2>Select Your Seat</h2>
-
+    //     <button className="close-button" onClick={onClose}>✕</button>
+    //     <h2>Select Your Seat</h2>
+{/* 
         <div className="seat-grid">
           {seats.map((row, ri) => (
             <div key={ri} className="seat-row">
@@ -66,13 +66,13 @@ const SeatBookingModal = ({ onClose, onConfirm }) => {
               alt={`360 view ${selectedSeat.id}`}
             />
           </div>
-        )}
+        )} */}
 
         <button
-          onClick={() => {
-            if (!selectedSeat) return alert("Please select a seat first.");
-            onConfirm(selectedSeat);
-          }}
+          // onClick={() => {
+          //   if (!selectedSeat) return alert("Please select a seat first.");
+          //   onConfirm(selectedSeat);
+          // }}
           className="btn confirm-btn"
         >
           ✅ Confirm & Book

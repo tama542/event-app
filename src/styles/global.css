@@ -239,6 +239,7 @@ body {
 }
 
 /* Mobile Styles */
+/* Mobile Styles */
 @media screen and (max-width: 768px) {
   .hamburger {
     display: flex;
@@ -265,12 +266,39 @@ body {
     right: 0;
   }
 
-  .nav-menu a,
-  .logout-btn {
+  .nav-menu li {
+    width: 100%;
+  }
+
+  .nav-menu a {
     width: 100%;
     padding: 1rem;
     text-align: left;
     border-radius: 6px;
+    display: block;
+  }
+
+  /* Specific logout button styles for mobile */
+  .nav-menu .logout-btn {
+    width: 100%;
+    padding: 1rem;
+    text-align: left;
+    border-radius: 6px;
+    display: block;
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+
+  .nav-menu a:hover,
+  .nav-menu .logout-btn:hover {
+    background-color: var(--accent-color);
+    transform: translateY(-1px);
   }
 
   .dropdown-menu {
@@ -292,21 +320,6 @@ body {
     margin-right: 0.5rem;
     padding: 0.5rem;
     font-size: 0.9rem;
-  }
-}
-
-@media screen and (max-width: 480px) {
-  .nav-container {
-    padding: 0 1rem;
-  }
-
-  .logo {
-    font-size: 1.5rem;
-  }
-
-  .dark-mode-toggle {
-    font-size: 0.8rem;
-    padding: 0.4rem;
   }
 }
 
@@ -1489,6 +1502,169 @@ body.dark-mode .about-cta button:hover {
 
 
 
+
+
+
+
+
+
+/* ========== Event Card Specific Styles ========== */
+.event-card {
+  background: var(--card-bg-color);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  border: 1px solid var(--border-color);
+  margin: 1rem;
+}
+
+.event-card-content {
+  padding: 1.5rem;
+}
+
+.event-card .action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+/* Event Card specific button styles */
+.event-card .btn {
+  min-height: 40px;
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  font-weight: 600;
+  text-align: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.event-card .btn.primary {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+}
+
+.event-card .btn.secondary {
+  background: var(--secondary-color);
+  color: var(--text-color);
+  border: 1px solid var(--input-border-color);
+}
+
+.event-card .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Mobile-specific styles for EventCard buttons */
+@media screen and (max-width: 768px) {
+  .event-card {
+    margin: 0.5rem;
+  }
+  
+  .event-card-content {
+    padding: 1rem;
+  }
+  
+  .event-card .action-buttons {
+    gap: 0.5rem;
+  }
+  
+  .event-card .btn {
+    min-height: 36px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.85rem;
+    border-radius: 6px;
+  }
+  
+  /* Make buttons more compact on mobile */
+  .event-card .btn::before {
+    margin-right: 0.3rem;
+    font-size: 0.9em;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .event-card .btn {
+    min-height: 32px;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8rem;
+  }
+  
+  .event-card-content {
+    padding: 0.75rem;
+  }
+}
+
+/* ========== Modal Button Styles ========== */
+.seat-modal .btn,
+.modal-content .btn {
+  min-height: 40px;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9rem;
+  margin: 0.25rem;
+}
+
+@media screen and (max-width: 768px) {
+  .seat-modal .btn,
+  .modal-content .btn {
+    min-height: 36px;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.85rem;
+    width: 100%;
+    margin: 0.2rem 0;
+  }
+}
+
+/* ========== Review & Favorite Button Styles ========== */
+.event-card .toggle-reviews-btn {
+  background: none;
+  border: none;
+  color: var(--primary-color);
+  cursor: pointer;
+  font-size: 0.85rem;
+  text-decoration: underline;
+  padding: 0.25rem 0.5rem;
+  margin-left: 0.5rem;
+}
+
+.event-card .favorite-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: var(--transition);
+  min-height: auto;
+  width: auto;
+}
+
+.event-card .favorite-btn:hover {
+  background: rgba(0, 0, 0, 0.1);
+  transform: scale(1.1);
+}
+
+/* ========== Countdown Timer Styles ========== */
+.event-card .countdown-timer {
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.5rem;
+  border-radius: 6px;
+  background: var(--bg-alt);
+  text-align: center;
+  margin: 0.5rem 0;
+}
+
+@media screen and (max-width: 768px) {
+  .event-card .countdown-timer {
+    font-size: 0.8rem;
+    padding: 0.4rem;
+  }
+}
 
 
 
