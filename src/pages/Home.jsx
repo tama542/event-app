@@ -211,9 +211,9 @@ export default function Home() {
       <section className="partners">
         <h2>Our Partners</h2>
         <div className="partner-logos">
-          <img src="public/pic/patner.jpg" alt="Partner 1" />
-          <img src="public/pic/patner1.jpg" alt="Partner 2" />
-          <img src="public/pic/patner2.jpg" alt="Partner 3" />
+          <img src="/pic/patner.jpg" alt="Partner 1" />
+          <img src="/pic/patner1.jpg" alt="Partner 2" />
+          <img src="/pic/patner2.jpg" alt="Partner 3" />
         </div>
       </section>
 

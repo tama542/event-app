@@ -34,14 +34,30 @@ function Navbar() {
         <Link to="/" className="logo" onClick={handleLinkClick}>
           TN events
         </Link>
-        {user && (
-          <>
-            <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
-              <span className="bar"></span>
-              <span className="bar"></span>
-              <span className="bar"></span>
-            </button>
-            <ul className={`nav-menu ${menuOpen ? "active" : ""}`}>
+        
+        {/* Dark mode toggle - always visible */}
+        <button
+          className="dark-mode-toggle"
+          onClick={() => setDarkMode(!darkMode)}
+        >
+          {darkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
+        </button>
+
+        {/* Hamburger menu - show for all users */}
+        <button 
+          className={`hamburger ${menuOpen ? "active" : ""}`} 
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          <span className="bar"></span>
+          <span className="bar"></span>
+          <span className="bar"></span>
+        </button>
+
+        {/* Navigation menu - different content based on auth status */}
+        <ul className={`nav-menu ${menuOpen ? "active" : ""}`}>
+          {user ? (
+            // Logged in user menu
+            <>
               <li>
                 <Link to="/" onClick={handleLinkClick}>
                   Home
@@ -85,14 +101,9 @@ function Navbar() {
                   Dashboard
                 </Link>
               </li>
-               <li>
+              <li>
                 <Link to="/about" onClick={handleLinkClick}>
                   About
-                </Link>
-              </li>
-              <li>
-                <Link to={handleLogout} className="logout-btn">
-                  Logout
                 </Link>
               </li>
               <li>
@@ -100,31 +111,23 @@ function Navbar() {
                   Logout
                 </button>
               </li>
-            </ul>
-          </>
-        )}
-        {/* Show dark mode toggle always */}
-        <button
-          className="dark-mode-toggle"
-          onClick={() => setDarkMode(!darkMode)}
-        >
-          {darkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
-        </button>
-        {/* When user is not logged in, show login/register links */}
-        {!user && (
-          <ul className="nav-menu">
-            <li>
-              <Link to="/login" onClick={handleLinkClick}>
-                Login
-              </Link>
-            </li>
-            <li>
-              <Link to="/register" onClick={handleLinkClick}>
-                Register
-              </Link>
-            </li>
-          </ul>
-        )}
+            </>
+          ) : (
+            // Non-logged in user menu
+            <>
+              <li>
+                <Link to="/login" onClick={handleLinkClick}>
+                  Login
+                </Link>
+              </li>
+              <li>
+                <Link to="/register" onClick={handleLinkClick}>
+                  Register
+                </Link>
+              </li>
+            </>
+          )}
+        </ul>
       </div>
     </nav>
   );
