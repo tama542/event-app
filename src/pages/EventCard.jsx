@@ -1,99 +1,58 @@
 // src/components/EventCard.jsx
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import RatingStars from "./RatingStars";
 import { motion } from "framer-motion";
 
-const SeatBookingModal = ({ onClose, onConfirm }) => {
-  const initialSeats = Array.from({ length: 5 }, (_, r) =>
-    Array.from({ length: 5 }, (_, c) => ({
-      id: `${r}-${c}`,
-      available: Math.random() > 0.2,
-    }))
-  );
-
-  const [seats] = useState(initialSeats);
-  const [selectedSeat, setSelectedSeat] = useState(null);
-  const [showAR, setShowAR] = useState(false);
-
-  const handleSeatClick = (seat) => {
-    if (!seat.available) return alert("This seat is not available.");
-    setSelectedSeat(seat);
-  };
-
-  return (
-     <div className="seat-modal">
-    //   <motion.div
-    //     className="seat-modal-content"
-    //     initial={{ scale: 0.8, opacity: 0 }}
-    //     animate={{ scale: 1, opacity: 1 }}
-      >
-    //     <button className="close-button" onClick={onClose}>✕</button>
-    //     <h2>Select Your Seat</h2>
-{/* 
-        <div className="seat-grid">
-          {seats.map((row, ri) => (
-            <div key={ri} className="seat-row">
-              {row.map((seat) => (
-                <div
-                  key={seat.id}
-                  className={`seat ${seat.available ? "available" : "unavailable"} ${selectedSeat?.id === seat.id ? "selected" : ""}`}
-                  onClick={() => handleSeatClick(seat)}
-                  title={`Seat ${seat.id}`}
-                >
-                  {seat.id}
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
-
-        {selectedSeat && (
-          <>
-            <p>Selected: <strong>{selectedSeat.id}</strong></p>
-            <button onClick={() => setShowAR(true)} className="btn secondary">
-              🎥 View 360° / AR Preview
-            </button>
-          </>
-        )}
-
-        {showAR && (
-          <div className="ar-view">
-            <button className="close-button" onClick={() => setShowAR(false)}>✕</button>
-            <h3>360° View Seat {selectedSeat.id}</h3>
-            <img
-              src={`https://via.placeholder.com/600x400?text=360+Seat+${selectedSeat.id}`}
-              alt={`360 view ${selectedSeat.id}`}
-            />
-          </div>
-        )} */}
-
-        <button
-          // onClick={() => {
-          //   if (!selectedSeat) return alert("Please select a seat first.");
-          //   onConfirm(selectedSeat);
-          // }}
-          className="btn confirm-btn"
-        >
-          ✅ Confirm & Book
-        </button>
-      </motion.div>
-    </div>
-  );
-};
+// Mock events data - replace this with actual API call or context
+const mockEvents = [
+  {
+    id: "1",
+    title: "Live Concert",
+    description: "An amazing night of music and fun.",
+    date: "2025-12-01T20:00:00",
+    image: "https://via.placeholder.com/600x300?text=Concert+Event",
+    rating: 4,
+    reviews: 120,
+    price: 75
+  },
+  {
+    id: "2",
+    title: "Art Exhibition",
+    description: "Contemporary art from local artists.",
+    date: "2025-11-15T10:00:00",
+    image: "https://via.placeholder.com/600x300?text=Art+Exhibition",
+    rating: 4.5,
+    reviews: 89,
+    price: 25
+  },
+  {
+    id: "3",
+    title: "Food Festival",
+    description: "Taste the best local and international cuisine.",
+    date: "2025-12-10T12:00:00",
+    image: "https://via.placeholder.com/600x300?text=Food+Festival",
+    rating: 4.2,
+    reviews: 156,
+    price: 40
+  }
+];
 
 const EventDetailsModal = ({ event, onClose }) => (
-  <div className="modal-overlay">
+  <div className="modal-overlay" onClick={onClose}>
     <motion.div
       className="modal-content details-modal"
       initial={{ y: -50, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
+      onClick={(e) => e.stopPropagation()}
     >
       <button className="close-button" onClick={onClose}>✕</button>
       <img src={event.image} alt={event.title} className="modal-image" />
       <h2>{event.title}</h2>
       <p>{event.description}</p>
-      <p><strong>Date:</strong> {event.date}</p>
+      <p><strong>Date:</strong> {new Date(event.date).toLocaleDateString()}</p>
+      <p><strong>Time:</strong> {new Date(event.date).toLocaleTimeString()}</p>
+      <p><strong>Price:</strong> ${event.price}</p>
       <div className="reviews">
         <RatingStars rating={event.rating} />
         <span>({event.reviews} reviews)</span>
@@ -103,27 +62,14 @@ const EventDetailsModal = ({ event, onClose }) => (
   </div>
 );
 
-const EventCard = () => {
+const EventCard = ({ event, showAll = false }) => {
   const navigate = useNavigate();
-  const { id } = useParams();
 
-  // Stub event data (replace with fetch/store)
-  const event = {
-    id,
-    title: "Live Concert",
-    description: "An amazing night of music and fun.",
-    date: "2025-12-01T20:00:00",
-    image: "https://via.placeholder.com/600x300?text=Event+Image",
-    rating: 4,
-    reviews: 120,
-  };
-
-  const { title, description, date, image, rating, reviews } = event;
+  const { title, description, date, image, rating, reviews, price, id } = event;
 
   const [timeLeft, setTimeLeft] = useState("");
   const [isFavorite, setIsFavorite] = useState(false);
   const [showReviews, setShowReviews] = useState(false);
-  const [showSeatModal, setShowSeatModal] = useState(false);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
 
   useEffect(() => {
@@ -144,30 +90,51 @@ const EventCard = () => {
     return () => clearInterval(iv);
   }, [date]);
 
-  const handleSeatConfirm = (selectedSeat) => {
-    const amount = 100;
-    setShowSeatModal(false);
-    navigate("/payment", { state: { event, selectedSeat, amount } });
+  const handleBookNow = () => {
+    // Direct navigation to payment without seat selection
+   
+       navigate("/payment", { 
+    state: { 
+      event: event,
+      amount: event.price || 100, // Use event price or default
+      bookingReference: `EVT-${event.id}-${Date.now()}`,
+    }
+      
+    });
   };
 
   const toggleFavorite = () => setIsFavorite((f) => !f);
   const toggleReviews = () => setShowReviews((r) => !r);
 
   const shareEvent = async () => {
-    const shareData = { title: `Event: ${title}`, text: description, url: window.location.href };
+    const shareData = { 
+      title: `Event: ${title}`, 
+      text: description, 
+      url: window.location.href 
+    };
+    
     if (navigator.share) {
-      try { await navigator.share(shareData); alert("Shared!"); } catch {}
+      try { 
+        await navigator.share(shareData); 
+      } catch (err) {
+        console.log('Share cancelled');
+      }
     } else {
       navigator.clipboard.writeText(window.location.href);
-      alert("URL copied");
+      alert("Event URL copied to clipboard!");
     }
   };
 
-  const countdownStyle = timeLeft.includes("Event Started") ? { color: "red", fontWeight: "bold" } : {};
+  const countdownStyle = timeLeft.includes("Event Started") ? 
+    { color: "red", fontWeight: "bold" } : {};
 
   return (
-    <motion.div className="event-card" whileHover={{ scale: 1.02 }}>
-      <img src="public/pic/culture.jpg" alt={title} className="event-image" />
+    <motion.div 
+      className="event-card" 
+      whileHover={{ scale: showAll ? 1.02 : 1 }}
+      layout
+    >
+      <img src={image} alt={title} className="event-image" />
 
       <div className="event-card-content">
         <div className="top-header">
@@ -177,8 +144,17 @@ const EventCard = () => {
           </button>
         </div>
 
-        <p>{description}</p>
-        <p style={countdownStyle}><strong>Starts in:</strong> {timeLeft}</p>
+        <p className="event-description">
+          {showAll ? description : `${description.substring(0, 100)}...`}
+        </p>
+        
+        <p style={countdownStyle}>
+          <strong>Starts in:</strong> {timeLeft}
+        </p>
+
+        <div className="event-price">
+          <strong>Price: ${price}</strong>
+        </div>
 
         <div className="reviews">
           <RatingStars rating={rating} />
@@ -189,40 +165,126 @@ const EventCard = () => {
         </div>
 
         {showReviews && (
-          <motion.div className="review-details" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <p>"Great event!" - Mark</p>
-            <p>"An unforgettable time!" - Nancy</p>
+          <motion.div 
+            className="review-details" 
+            initial={{ opacity: 0, height: 0 }} 
+            animate={{ opacity: 1, height: "auto" }}
+          >
+            <p>"Great event! Would definitely go again." - Sarah</p>
+            <p>"Amazing atmosphere and great organization." - Mike</p>
+            <p>"An unforgettable experience!" - Jessica</p>
           </motion.div>
         )}
 
         <div className="action-buttons">
-          <button onClick={() => setShowSeatModal(true)} className="btn primary">🎟️ RSVP / Book Now</button>
-          <button onClick={shareEvent} className="btn secondary">🔗 Share</button>
-         <button
-  onClick={() => {
-    const subject = encodeURIComponent(`Invitation to ${event.title}`);
-    const body = encodeURIComponent(
-      `Hey,\n\nI’d love for you to join me at "${event.title}"!\n\nDetails:\n${event.description}\nDate: ${event.date}\n\nHere’s the link: ${window.location.href}\n\nHope to see you there!`
-    );
-    window.location.href = `mailto:?subject=${subject}&body=${body}`;
-  }}
-  className="btn secondary"
->
-  📧 Email Invite
-</button>
+          <button onClick={handleBookNow} className="btn primary">
+            🎟️ Book Now - ${price}
+          </button>
+          
+          <div className="secondary-buttons">
+            <button onClick={shareEvent} className="btn secondary">
+              🔗 Share
+            </button>
+            
+            <button
+              onClick={() => {
+                const subject = encodeURIComponent(`Invitation to ${title}`);
+                const body = encodeURIComponent(
+                  `Hey,\n\nI'd love for you to join me at "${title}"!\n\nDetails:\n${description}\nDate: ${new Date(date).toLocaleDateString()}\nTime: ${new Date(date).toLocaleTimeString()}\nPrice: $${price}\n\nHere's the link: ${window.location.href}\n\nHope to see you there!`
+                );
+                window.location.href = `mailto:?subject=${subject}&body=${body}`;
+              }}
+              className="btn secondary"
+            >
+              📧 Invite
+            </button>
 
-          <button onClick={() => setShowDetailsModal(true)} className="btn secondary">ℹ️ Details</button>
+            <button 
+              onClick={() => setShowDetailsModal(true)} 
+              className="btn secondary"
+            >
+              ℹ️ Details
+            </button>
+          </div>
         </div>
       </div>
 
-      {showSeatModal && (
-        <SeatBookingModal onClose={() => setShowSeatModal(false)} onConfirm={handleSeatConfirm} />
-      )}
       {showDetailsModal && (
-        <EventDetailsModal event={event} onClose={() => setShowDetailsModal(false)} />
+        <EventDetailsModal 
+          event={event} 
+          onClose={() => setShowDetailsModal(false)} 
+        />
       )}
     </motion.div>
   );
 };
 
+// Main Events Section Component
+const EventsSection = () => {
+  const [events] = useState(mockEvents);
+  const [selectedCategory, setSelectedCategory] = useState("all");
+
+  // In a real app, you would fetch events from an API
+  // useEffect(() => {
+  //   const fetchEvents = async () => {
+  //     try {
+  //       const response = await fetch('/api/events');
+  //       const eventsData = await response.json();
+  //       setEvents(eventsData);
+  //     } catch (error) {
+  //       console.error('Error fetching events:', error);
+  //     }
+  //   };
+  //   fetchEvents();
+  // }, []);
+
+  return (
+    <div className="events-section">
+      <div className="events-header">
+        <h2>Upcoming Events</h2>
+        <div className="category-filters">
+          <button 
+            className={selectedCategory === "all" ? "active" : ""}
+            onClick={() => setSelectedCategory("all")}
+          >
+            All Events
+          </button>
+          <button 
+            className={selectedCategory === "music" ? "active" : ""}
+            onClick={() => setSelectedCategory("music")}
+          >
+            Music
+          </button>
+          <button 
+            className={selectedCategory === "art" ? "active" : ""}
+            onClick={() => setSelectedCategory("art")}
+          >
+            Art
+          </button>
+          <button 
+            className={selectedCategory === "food" ? "active" : ""}
+            onClick={() => setSelectedCategory("food")}
+          >
+            Food
+          </button>
+        </div>
+      </div>
+
+      <motion.div 
+        className="events-grid"
+        layout
+      >
+        {events.map((event) => (
+          <EventCard 
+            key={event.id} 
+            event={event} 
+            showAll={true}
+          />
+        ))}
+      </motion.div>
+    </div>
+  );
+};
+
 export default EventCard;
+// export { EventCard }; // Export individual card if needed elsewhere

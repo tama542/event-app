@@ -1,47 +1,4 @@
-// import React, { useEffect, useState } from 'react';
-// import { useParams } from 'react-router-dom';
-// import TicketBooking from '../components/TicketBooking';
-// import SocialShare from '../components/SocialShare';
 
-// function EventDetails() {
-//   const { id } = useParams();
-//   const [event, setEvent] = useState(null);
-  
-//   useEffect(() => {
-//     // Simulated API call – replace with actual API integration
-//     const demoEvent = {
-//       id,
-//       title: "Summer Music Festival",
-//       date: "2025-06-20",
-//       category: "Music",
-//       location: "Central Park",
-//       description: "Join us for an unforgettable experience with live performances, food vendors, and immersive activities. Feel the energy and make memories that last a lifetime!",
-//       image: "https://source.unsplash.com/1200x400/?concert"
-//     };
-//     setTimeout(() => setEvent(demoEvent), 500);
-//   }, [id]);
-
-//   if (!event) return <p>Loading event details...</p>;
-
-//   return (
-//     <div className="event-details">
-//       <img src={event.image} alt={event.title} />
-//       <h2>{event.title}</h2>
-//       <p><strong>Date:</strong> {event.date}</p>
-//       <p><strong>Location:</strong> {event.location}</p>
-//       <p>{event.description}</p>
-//       <TicketBooking eventTitle={event.title} />
-//       <SocialShare eventUrl={window.location.href} eventTitle={event.title} />
-//     </div>
-//   );
-// }
-
-// export default EventDetails;
-
-// src/components/EventSection.jsx
-
-
-// src/components/EventSection.jsx
 import React, { useState } from "react";
 import EventCard from "./EventCard";
 
@@ -56,7 +13,9 @@ const EventSection = () => {
       image: "/pic/summer.jpg",
       rating: 4,
       reviews: 20,
-      category: "Music"
+      category: "Music",
+      price: 40,
+
     },
     {
       id: 2,
