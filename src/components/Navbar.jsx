@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 function Navbar() {
-  const { user, setUser } = useAuth();
+  const { user, logout } = useAuth(); // Use logout instead of setUser
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -18,7 +18,9 @@ function Navbar() {
   }, [darkMode]);
 
   const handleLogout = () => {
-    setUser(null);
+    logout(); // Use the logout function from AuthContext
+    setMenuOpen(false);
+    setDropdownOpen(false);
     navigate("/login");
   };
 
@@ -101,6 +103,16 @@ function Navbar() {
                   Dashboard
                 </Link>
               </li>
+              
+              {/* Show Admin link only for admin users */}
+              {user.role === 'admin' && (
+                <li>
+                  <Link to="/admin" onClick={handleLinkClick}>
+                    Admin
+                  </Link>
+                </li>
+              )}
+              
               <li>
                 <Link to="/about" onClick={handleLinkClick}>
                   About
@@ -108,7 +120,7 @@ function Navbar() {
               </li>
               <li>
                 <button onClick={handleLogout} className="logout-btn">
-                  Logout
+                  Logout ({user.name || user.username})
                 </button>
               </li>
             </>
@@ -123,6 +135,11 @@ function Navbar() {
               <li>
                 <Link to="/register" onClick={handleLinkClick}>
                   Register
+                </Link>
+              </li>
+              <li>
+                <Link to="/about" onClick={handleLinkClick}>
+                  About
                 </Link>
               </li>
             </>

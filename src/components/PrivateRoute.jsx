@@ -1,21 +1,55 @@
+// // src/components/PrivateRoute.jsx
+// import React from 'react';
+// import { Navigate } from 'react-router-dom';
+// import { useAuth } from '../context/AuthContext';
+
+// const PrivateRoute = ({ children }) => {
+//   const { user, loading } = useAuth();
+
+//   if (loading) {
+//     return (
+//       <div className="loading-spinner" style={{ 
+//         textAlign: 'center', 
+//         padding: '2rem',
+//         color: 'var(--text-color)'
+//       }}>
+//         Checking authentication...
+//       </div>
+//     );
+//   }
+
+//   console.log('PrivateRoute - User:', user); // Debug log
+
+//   return user ? children : <Navigate to="/login" replace />;
+// };
+
+// export default PrivateRoute;
 // src/components/PrivateRoute.jsx
-import React from "react";
-import { Navigate, useLocation } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import React from 'react';
+import { Navigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const PrivateRoute = ({ children }) => {
-  const { user } = useAuth();
-  const location = useLocation();
+  const { user, loading } = useAuth();
 
-  // If the user is not logged in, redirect them to the login page.
-  // The location state is used to remember where the user intended to go.
-  if (!user) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
+  console.log('🛡️ PrivateRoute - Auth state:', { user, loading });
+
+  if (loading) {
+    console.log('⏳ PrivateRoute - Still loading...');
+    return (
+      <div className="loading-spinner" style={{ 
+        textAlign: 'center', 
+        padding: '2rem',
+        color: 'var(--text-color)'
+      }}>
+        Checking authentication...
+      </div>
+    );
   }
 
-  // Otherwise, render the protected content
-  return children;
+  console.log('🔐 PrivateRoute - Decision:', user ? 'ACCESS GRANTED' : 'ACCESS DENIED');
+
+  return user ? children : <Navigate to="/login" replace />;
 };
 
 export default PrivateRoute;
-
