@@ -5,8 +5,10 @@
     "date": "2025-07-10T19:00:00Z",
     "price": 25,
     "category": "Music",
-    "img": "/images/jazz.jpg",
-    "description": "An evening of smooth jazz by the lake."
+    "img": "/pic/summer.jpg",
+    "description": "An evening of smooth jazz by the lake.",
+    "venue": "Lakeside Amphitheater",
+    "capacity": 500
   },
   {
     "id": 2,
@@ -14,10 +16,53 @@
     "date": "2025-08-05T09:00:00Z",
     "price": 20,
     "category": "Tech",
-    "img": "/images/jazz.jpg",
-    "description": "Join the brightest minds in AI, web3 & robotics."
+    "img": "/pic/movie.jpg",
+    "description": "Join the brightest minds in AI, web3 & robotics.",
+    "venue": "Convention Center",
+    "capacity": 1000
+  },
+  {
+    "id": 3,
+    "name": "Art Festival",
+    "date": "2025-07-20T15:00:00Z",
+    "price": 15,
+    "category": "Art",
+    "img": "/pic/art.jpg",
+    "description": "Experience creativity at its finest at the annual art festival.",
+    "venue": "City Park",
+    "capacity": 300
+  },
+  {
+    "id": 4,
+    "name": "Food Carnival",
+    "date": "2025-12-01T12:00:00Z",
+    "price": 30,
+    "category": "Food",
+    "img": "/pic/food.jpg",
+    "description": "Taste a variety of international cuisines at our food carnival.",
+    "venue": "Downtown Square",
+    "capacity": 800
+  },
+  {
+    "id": 5,
+    "name": "Sports Gala",
+    "date": "2025-10-05T18:00:00Z",
+    "price": 35,
+    "category": "Sports",
+    "img": "/pic/sports.jpg",
+    "description": "Cheer on your favorite teams at our annual sports gala.",
+    "venue": "Sports Arena",
+    "capacity": 2000
+  },
+  {
+    "id": 6,
+    "name": "Cultural Fair",
+    "date": "2025-11-11T14:00:00Z",
+    "price": 20,
+    "category": "Culture",
+    "img": "/pic/culture.jpg",
+    "description": "Celebrate traditions and diversity at the Cultural Fair.",
+    "venue": "Community Center",
+    "capacity": 400
   }
-
-  
-  
 ]

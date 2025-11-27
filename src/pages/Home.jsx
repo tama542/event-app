@@ -163,7 +163,7 @@ export default function Home() {
                 {new Date(e.date).toLocaleDateString()} · {e.category}
               </p>
               <p className="price">{e.price > 0 ? `$${e.price}` : "Free"}</p>
-              <Link to={`/events/${e.id}`} className="btn small">Details</Link>
+              <Link to={`/${e.id}`} className="btn small">Details</Link>
             </div>
           </motion.div>
         ))}

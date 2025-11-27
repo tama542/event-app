@@ -3,10 +3,10 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useAuth } from "../context/AuthContext"; // Add this import
+import { useAuth } from "../context/AuthContext";
 
-const Dashboard = () => { // Remove the user prop
-  const { user } = useAuth(); // Get user from AuthContext
+const Dashboard = () => {
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("overview");
   const [events, setEvents] = useState([]);
@@ -19,86 +19,90 @@ const Dashboard = () => { // Remove the user prop
   });
   const [loading, setLoading] = useState(true);
   const [newEvent, setNewEvent] = useState({
-    title: "",
+    name: "",
     description: "",
     date: "",
-    time: "",
     price: 0,
     category: "Music",
-    image: "",
+    img: "",
     venue: "",
     capacity: 100
   });
+  const [editingEventId, setEditingEventId] = useState(null);
 
-  // Sample events data (replace with your API)
-  const sampleEvents = [
-    {
-      id: 1,
-      title: "Summer Concert",
-      description: "Enjoy an unforgettable night with live music under the stars.",
-      date: "2025-08-15T20:00:00",
-      image: "/pic/summer.jpg",
-      rating: 4,
-      reviews: 20,
-      category: "Music",
-      price: 40,
-      venue: "Central Park",
-      capacity: 1000,
-      booked: 750,
-      status: "active"
-    },
-    {
-      id: 2,
-      title: "Tech Expo",
-      description: "Discover cutting-edge innovations at the annual tech expo.",
-      date: "2025-09-10T10:00:00",
-      image: "/pic/tech-expo.jpg",
-      rating: 5,
-      reviews: 35,
-      category: "Tech",
-      price: 60,
-      venue: "Convention Center",
-      capacity: 2000,
-      booked: 1200,
-      status: "active"
-    }
-  ];
-
-  const sampleBookings = [
-    {
-      id: "BK-001",
-      eventId: 1,
-      eventTitle: "Summer Concert",
-      userName: "John Doe",
-      userEmail: "john@example.com",
-      bookingDate: "2024-01-15",
-      tickets: 2,
-      totalAmount: 80,
-      status: "confirmed"
-    },
-    {
-      id: "BK-002",
-      eventId: 2,
-      eventTitle: "Tech Expo",
-      userName: "Jane Smith",
-      userEmail: "jane@example.com",
-      bookingDate: "2024-01-16",
-      tickets: 1,
-      totalAmount: 60,
-      status: "confirmed"
-    }
-  ];
-
+  // Load events from JSON file and localStorage
   useEffect(() => {
-    // Simulate API calls
-    setLoading(true);
-    setTimeout(() => {
-      setEvents(sampleEvents);
-      setBookings(sampleBookings);
-      calculateStats(sampleEvents, sampleBookings);
-      setLoading(false);
-    }, 1000);
+    const loadEvents = async () => {
+      setLoading(true);
+      try {
+        // First try to load from localStorage (user-created events)
+        const savedEvents = JSON.parse(localStorage.getItem('tn-events') || '[]');
+        
+        // If no saved events, load from JSON file
+        if (savedEvents.length === 0) {
+          const response = await fetch("/data/events.json");
+          const jsonEvents = await response.json();
+          
+          // Enhance events with additional properties
+          const enhancedEvents = jsonEvents.map(event => ({
+            ...event,
+            id: event.id || Math.random(),
+            venue: event.venue || "Main Hall",
+            capacity: event.capacity || 100,
+            booked: Math.floor(Math.random() * (event.capacity || 100)),
+            status: "active",
+            rating: event.rating || Math.floor(Math.random() * 2) + 3,
+            reviews: event.reviews || Math.floor(Math.random() * 50) + 10
+          }));
+          
+          setEvents(enhancedEvents);
+          localStorage.setItem('tn-events', JSON.stringify(enhancedEvents));
+        } else {
+          setEvents(savedEvents);
+        }
+        
+      } catch (error) {
+        console.error("Error loading events:", error);
+        toast.error("Failed to load events data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadEvents();
   }, []);
+
+  // Generate bookings whenever events change
+  useEffect(() => {
+    if (events.length > 0) {
+      const sampleBookings = generateBookings(events);
+      setBookings(sampleBookings);
+      calculateStats(events, sampleBookings);
+    }
+  }, [events]);
+
+  const generateBookings = (eventsData) => {
+    const bookingTemplates = [
+      { userName: "John Doe", userEmail: "john@example.com" },
+      { userName: "Jane Smith", userEmail: "jane@example.com" },
+      { userName: "Mike Johnson", userEmail: "mike@example.com" },
+      { userName: "Sarah Wilson", userEmail: "sarah@example.com" },
+      { userName: "David Brown", userEmail: "david@example.com" }
+    ];
+
+    return eventsData.flatMap(event => 
+      Array.from({ length: Math.floor(Math.random() * 3) + 1 }, (_, index) => ({
+        id: `BK-${event.id}-${index + 1}`,
+        eventId: event.id,
+        eventTitle: event.name || event.title,
+        ...bookingTemplates[Math.floor(Math.random() * bookingTemplates.length)],
+        bookingDate: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        tickets: Math.floor(Math.random() * 4) + 1,
+        totalAmount: event.price * (Math.floor(Math.random() * 4) + 1),
+        status: "confirmed"
+      }))
+    );
+  };
 
   const calculateStats = (eventsData, bookingsData) => {
     const totalEvents = eventsData.length;
@@ -114,60 +118,108 @@ const Dashboard = () => { // Remove the user prop
     });
   };
 
+  const saveEventsToStorage = (updatedEvents) => {
+    localStorage.setItem('tn-events', JSON.stringify(updatedEvents));
+  };
+
   const handleAddEvent = (e) => {
     e.preventDefault();
     
-    if (!newEvent.title || !newEvent.date || !newEvent.venue) {
+    if (!newEvent.name || !newEvent.date || !newEvent.venue) {
       toast.error("Please fill in all required fields");
       return;
     }
 
-    const event = {
-      id: events.length + 1,
-      ...newEvent,
-      rating: 0,
-      reviews: 0,
-      booked: 0,
-      status: "active"
-    };
+    let updatedEvents;
 
-    setEvents([...events, event]);
+    if (editingEventId) {
+      // Update existing event
+      updatedEvents = events.map(event => 
+        event.id === editingEventId 
+          ? {
+              ...event,
+              ...newEvent,
+              title: newEvent.name, // For compatibility
+              image: newEvent.img,  // For compatibility
+              date: newEvent.date.includes('T') ? newEvent.date : `${newEvent.date}T20:00:00Z`
+            }
+          : event
+      );
+      toast.success("Event updated successfully!");
+    } else {
+      // Create new event
+      const event = {
+        id: Date.now(), // Use timestamp for unique ID
+        ...newEvent,
+        title: newEvent.name, // For compatibility with EventCard
+        image: newEvent.img,  // For compatibility with EventCard
+        rating: 0,
+        reviews: 0,
+        booked: 0,
+        status: "active",
+        date: newEvent.date.includes('T') ? newEvent.date : `${newEvent.date}T20:00:00Z`
+      };
+
+      updatedEvents = [...events, event];
+      toast.success("Event created successfully!");
+    }
+
+    setEvents(updatedEvents);
+    saveEventsToStorage(updatedEvents);
+    
+    // Reset form
     setNewEvent({
-      title: "",
+      name: "",
       description: "",
       date: "",
-      time: "",
       price: 0,
       category: "Music",
-      image: "",
+      img: "",
       venue: "",
       capacity: 100
     });
+    setEditingEventId(null);
     
-    toast.success("Event created successfully!");
     setActiveTab("events");
   };
 
   const handleDeleteEvent = (eventId) => {
     if (window.confirm("Are you sure you want to delete this event?")) {
-      setEvents(events.filter(event => event.id !== eventId));
+      const updatedEvents = events.filter(event => event.id !== eventId);
+      setEvents(updatedEvents);
+      saveEventsToStorage(updatedEvents);
       toast.success("Event deleted successfully!");
     }
   };
 
   const handleEditEvent = (event) => {
     setNewEvent({
-      title: event.title,
+      name: event.name || event.title,
       description: event.description,
       date: event.date.split('T')[0],
-      time: event.date.split('T')[1]?.substring(0, 5) || "",
       price: event.price,
       category: event.category,
-      image: event.image,
+      img: event.img || event.image,
       venue: event.venue,
       capacity: event.capacity
     });
+    setEditingEventId(event.id);
     setActiveTab("create");
+  };
+
+  const cancelEdit = () => {
+    setNewEvent({
+      name: "",
+      description: "",
+      date: "",
+      price: 0,
+      category: "Music",
+      img: "",
+      venue: "",
+      capacity: 100
+    });
+    setEditingEventId(null);
+    setActiveTab("events");
   };
 
   const StatCard = ({ title, value, icon, color }) => (
@@ -187,16 +239,12 @@ const Dashboard = () => { // Remove the user prop
     </motion.div>
   );
 
-  // Add debug logging
-  console.log('🏠 Dashboard - Current user from AuthContext:', user);
-
   if (!user) {
     return (
       <div className="dashboard-container">
         <div className="dashboard-header">
           <h1>Event Dashboard</h1>
           <p>Please log in to access the dashboard</p>
-          <p>Debug: User is null in Dashboard component</p>
         </div>
       </div>
     );
@@ -221,7 +269,22 @@ const Dashboard = () => { // Remove the user prop
           <button
             key={tab}
             className={`tab-btn ${activeTab === tab ? 'active' : ''}`}
-            onClick={() => setActiveTab(tab)}
+            onClick={() => {
+              setActiveTab(tab);
+              if (tab !== "create") {
+                setEditingEventId(null);
+                setNewEvent({
+                  name: "",
+                  description: "",
+                  date: "",
+                  price: 0,
+                  category: "Music",
+                  img: "",
+                  venue: "",
+                  capacity: 100
+                });
+              }
+            }}
           >
             {tab.charAt(0).toUpperCase() + tab.slice(1)}
           </button>
@@ -256,7 +319,7 @@ const Dashboard = () => { // Remove the user prop
                   />
                   <StatCard
                     title="Revenue"
-                    value={`$${stats.revenue}`}
+                    value={`$${stats.revenue.toLocaleString()}`}
                     icon="💰"
                     color="#f59e0b"
                   />
@@ -283,6 +346,25 @@ const Dashboard = () => { // Remove the user prop
                     ))}
                   </div>
                 </div>
+
+                <div className="upcoming-events">
+                  <h3>Upcoming Events</h3>
+                  <div className="upcoming-list">
+                    {events
+                      .filter(event => new Date(event.date) > new Date())
+                      .slice(0, 3)
+                      .map(event => (
+                        <div key={event.id} className="upcoming-item">
+                          <img src={event.img || event.image} alt={event.name || event.title} />
+                          <div className="upcoming-details">
+                            <h4>{event.name || event.title}</h4>
+                            <p>{new Date(event.date).toLocaleDateString()}</p>
+                            <p>{event.venue}</p>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                </div>
               </motion.div>
             )}
 
@@ -294,7 +376,7 @@ const Dashboard = () => { // Remove the user prop
                 className="events-management"
               >
                 <div className="section-header">
-                  <h2>Manage Events</h2>
+                  <h2>Manage Events ({events.length})</h2>
                   <button 
                     className="btn primary"
                     onClick={() => setActiveTab("create")}
@@ -304,36 +386,50 @@ const Dashboard = () => { // Remove the user prop
                 </div>
 
                 <div className="events-table">
-                  {events.map(event => (
-                    <div key={event.id} className="event-row">
-                      <div className="event-info">
-                        <img src={event.image} alt={event.title} />
-                        <div className="event-details">
-                          <h4>{event.title}</h4>
-                          <p>{event.category} • {event.venue}</p>
-                          <p>{new Date(event.date).toLocaleDateString()}</p>
+                  {events.length === 0 ? (
+                    <div className="no-events">
+                      <p>No events found. Create your first event!</p>
+                    </div>
+                  ) : (
+                    events.map(event => (
+                      <div key={event.id} className="event-row">
+                        <div className="event-info">
+                          <img 
+                            src={event.img || event.image} 
+                            alt={event.name || event.title} 
+                            onError={(e) => {
+                              e.target.src = '/images/placeholder-event.jpg';
+                            }}
+                          />
+                          <div className="event-details">
+                            <h4>{event.name || event.title}</h4>
+                            <p>{event.category} • {event.venue}</p>
+                            <p>{new Date(event.date).toLocaleDateString()} • ${event.price}</p>
+                            <div className="event-meta">
+                              <span className={`status ${event.status}`}>
+                                {event.status}
+                              </span>
+                              <span>{event.booked}/{event.capacity} booked</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="event-actions">
+                          <button 
+                            className="btn secondary small"
+                            onClick={() => handleEditEvent(event)}
+                          >
+                            Edit
+                          </button>
+                          <button 
+                            className="btn danger small"
+                            onClick={() => handleDeleteEvent(event.id)}
+                          >
+                            Delete
+                          </button>
                         </div>
                       </div>
-                      <div className="event-stats">
-                        <span>{event.booked}/{event.capacity} booked</span>
-                        <span>${event.price}</span>
-                      </div>
-                      <div className="event-actions">
-                        <button 
-                          className="btn secondary small"
-                          onClick={() => handleEditEvent(event)}
-                        >
-                          Edit
-                        </button>
-                        <button 
-                          className="btn danger small"
-                          onClick={() => handleDeleteEvent(event.id)}
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </div>
-                  ))}
+                    ))
+                  )}
                 </div>
               </motion.div>
             )}
@@ -345,29 +441,38 @@ const Dashboard = () => { // Remove the user prop
                 animate={{ opacity: 1 }}
                 className="bookings-management"
               >
-                <h2>Bookings Management</h2>
+                <div className="section-header">
+                  <h2>Bookings Management ({bookings.length})</h2>
+                </div>
                 <div className="bookings-table">
-                  {bookings.map(booking => (
-                    <div key={booking.id} className="booking-row">
-                      <div className="booking-info">
-                        <strong>{booking.eventTitle}</strong>
-                        <p>Booking ID: {booking.id}</p>
-                        <p>Customer: {booking.userName} ({booking.userEmail})</p>
-                      </div>
-                      <div className="booking-details">
-                        <span>{booking.tickets} ticket(s)</span>
-                        <span>${booking.totalAmount}</span>
-                        <span className={`status ${booking.status}`}>
-                          {booking.status}
-                        </span>
-                      </div>
-                      <div className="booking-actions">
-                        <button className="btn secondary small">
-                          View Details
-                        </button>
-                      </div>
+                  {bookings.length === 0 ? (
+                    <div className="no-bookings">
+                      <p>No bookings yet. Bookings will appear here when customers purchase tickets.</p>
                     </div>
-                  ))}
+                  ) : (
+                    bookings.map(booking => (
+                      <div key={booking.id} className="booking-row">
+                        <div className="booking-info">
+                          <strong>{booking.eventTitle}</strong>
+                          <p>Booking ID: {booking.id}</p>
+                          <p>Customer: {booking.userName} ({booking.userEmail})</p>
+                          <p>Date: {booking.bookingDate}</p>
+                        </div>
+                        <div className="booking-details">
+                          <span>{booking.tickets} ticket(s)</span>
+                          <span>${booking.totalAmount}</span>
+                          <span className={`status ${booking.status}`}>
+                            {booking.status}
+                          </span>
+                        </div>
+                        <div className="booking-actions">
+                          <button className="btn secondary small">
+                            View Details
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  )}
                 </div>
               </motion.div>
             )}
@@ -379,16 +484,16 @@ const Dashboard = () => { // Remove the user prop
                 animate={{ opacity: 1 }}
                 className="create-event"
               >
-                <h2>{newEvent.title ? 'Edit Event' : 'Create New Event'}</h2>
+                <h2>{editingEventId ? 'Edit Event' : 'Create New Event'}</h2>
                 <form onSubmit={handleAddEvent} className="event-form">
                   <div className="form-grid">
                     <div className="form-group">
-                      <label>Event Title *</label>
+                      <label>Event Name *</label>
                       <input
                         type="text"
-                        value={newEvent.title}
-                        onChange={(e) => setNewEvent({...newEvent, title: e.target.value})}
-                        placeholder="Enter event title"
+                        value={newEvent.name}
+                        onChange={(e) => setNewEvent({...newEvent, name: e.target.value})}
+                        placeholder="Enter event name"
                         required
                       />
                     </div>
@@ -404,6 +509,9 @@ const Dashboard = () => { // Remove the user prop
                         <option value="Art">Art</option>
                         <option value="Food">Food</option>
                         <option value="Sports">Sports</option>
+                        <option value="Culture">Culture</option>
+                        <option value="Entertainment">Entertainment</option>
+                        <option value="Literature">Literature</option>
                       </select>
                     </div>
 
@@ -414,15 +522,7 @@ const Dashboard = () => { // Remove the user prop
                         value={newEvent.date}
                         onChange={(e) => setNewEvent({...newEvent, date: e.target.value})}
                         required
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      <label>Time</label>
-                      <input
-                        type="time"
-                        value={newEvent.time}
-                        onChange={(e) => setNewEvent({...newEvent, time: e.target.value})}
+                        min={new Date().toISOString().split('T')[0]}
                       />
                     </div>
 
@@ -431,9 +531,10 @@ const Dashboard = () => { // Remove the user prop
                       <input
                         type="number"
                         value={newEvent.price}
-                        onChange={(e) => setNewEvent({...newEvent, price: parseFloat(e.target.value)})}
+                        onChange={(e) => setNewEvent({...newEvent, price: parseFloat(e.target.value) || 0})}
                         min="0"
                         step="0.01"
+                        placeholder="0.00"
                       />
                     </div>
 
@@ -442,8 +543,9 @@ const Dashboard = () => { // Remove the user prop
                       <input
                         type="number"
                         value={newEvent.capacity}
-                        onChange={(e) => setNewEvent({...newEvent, capacity: parseInt(e.target.value)})}
+                        onChange={(e) => setNewEvent({...newEvent, capacity: parseInt(e.target.value) || 100})}
                         min="1"
+                        placeholder="100"
                       />
                     </div>
 
@@ -462,9 +564,9 @@ const Dashboard = () => { // Remove the user prop
                       <label>Image URL</label>
                       <input
                         type="url"
-                        value={newEvent.image}
-                        onChange={(e) => setNewEvent({...newEvent, image: e.target.value})}
-                        placeholder="Enter image URL"
+                        value={newEvent.img}
+                        onChange={(e) => setNewEvent({...newEvent, img: e.target.value})}
+                        placeholder="https://example.com/image.jpg"
                       />
                     </div>
 
@@ -473,7 +575,7 @@ const Dashboard = () => { // Remove the user prop
                       <textarea
                         value={newEvent.description}
                         onChange={(e) => setNewEvent({...newEvent, description: e.target.value})}
-                        placeholder="Enter event description"
+                        placeholder="Describe your event..."
                         rows="4"
                       />
                     </div>
@@ -481,25 +583,12 @@ const Dashboard = () => { // Remove the user prop
 
                   <div className="form-actions">
                     <button type="submit" className="btn primary">
-                      {newEvent.title ? 'Update Event' : 'Create Event'}
+                      {editingEventId ? 'Update Event' : 'Create Event'}
                     </button>
                     <button 
                       type="button" 
                       className="btn secondary"
-                      onClick={() => {
-                        setNewEvent({
-                          title: "",
-                          description: "",
-                          date: "",
-                          time: "",
-                          price: 0,
-                          category: "Music",
-                          image: "",
-                          venue: "",
-                          capacity: 100
-                        });
-                        setActiveTab("events");
-                      }}
+                      onClick={cancelEdit}
                     >
                       Cancel
                     </button>

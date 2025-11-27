@@ -1,111 +1,75 @@
-// src/components/EventSection.js
-import React, { useState } from "react";
+// src/components/EventSection.jsx
+import React, { useState, useEffect } from "react";
 import EventCard from "./EventCard";
 import { motion } from "framer-motion";
 
 const EventSection = () => {
-  const events = [
-    {
-      id: 1,
-      title: "Summer Concert",
-      description: "Enjoy an unforgettable night with live music under the stars.",
-      date: "2025-08-15T20:00:00",
-      image: "/pic/summer.jpg",
-      rating: 4,
-      reviews: 20,
-      category: "Music",
-      price: 40,
-    },
-    {
-      id: 2,
-      title: "Tech Expo",
-      description: "Discover cutting-edge innovations at the annual tech expo.",
-      date: "2025-09-10T10:00:00",
-      image: "/pic/tech-expo.jpg",
-      rating: 5,
-      reviews: 35,
-      category: "Tech",
-      price: 60,
-    },
-    {
-      id: 3,
-      title: "Art Festival",
-      description: "Experience creativity at its finest at the annual art festival.",
-      date: "2025-07-20T15:00:00",
-      image: "/pic/art.jpg",
-      rating: 3,
-      reviews: 15,
-      category: "Art",
-      price: 25,
-    },
-    {
-      id: 4,
-      title: "Food Carnival",
-      description: "Taste a variety of international cuisines at our food carnival.",
-      date: "2025-12-01T12:00:00",
-      image: "/pic/food.jpg",
-      rating: 4,
-      reviews: 50,
-      category: "Food",
-      price: 30,
-    },
-    {
-      id: 5,
-      title: "Sports Gala",
-      description: "Cheer on your favorite teams at our annual sports gala.",
-      date: "2025-10-05T18:00:00",
-      image: "/pic/sports.jpg",
-      rating: 5,
-      reviews: 45,
-      category: "Sports",
-      price: 35,
-    },
-    {
-      id: 6,
-      title: "Cultural Fair",
-      description: "Celebrate traditions and diversity at the Cultural Fair.",
-      date: "2025-11-11T14:00:00",
-      image: "/pic/culture.jpg",
-      rating: 4,
-      reviews: 25,
-      category: "Culture",
-      price: 20,
-    },
-    {
-      id: 7,
-      title: "Outdoor Movie Night",
-      description: "Join us for a magical evening under the stars with a classic film.",
-      date: "2025-08-30T19:00:00",
-      image: "/pic/movie.jpg",
-      rating: 4,
-      reviews: 30,
-      category: "Entertainment",
-      price: 15,
-    },
-    {
-      id: 8,
-      title: "Book Festival",
-      description: "Meet your favorite authors and explore new genres at our Book Festival.",
-      date: "2025-10-20T11:00:00",
-      image: "/pic/books.jpg",
-      rating: 5,
-      reviews: 40,
-      category: "Literature",
-      price: 10,
-    }
-  ];
-
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const categories = ["All", "Music", "Tech", "Art", "Food", "Sports", "Culture", "Entertainment", "Literature"];
+
+  useEffect(() => {
+    const loadEvents = async () => {
+      try {
+        // Load from localStorage first (user-created events), then fallback to JSON
+        const savedEvents = JSON.parse(localStorage.getItem('tn-events') || '[]');
+        
+        if (savedEvents.length > 0) {
+          setEvents(savedEvents);
+        } else {
+          // Fallback to JSON file
+          const response = await fetch("/data/events.json");
+          const jsonEvents = await response.json();
+          
+          const enhancedEvents = jsonEvents.map(event => ({
+            ...event,
+            title: event.name,
+            image: event.img,
+            rating: event.rating || Math.floor(Math.random() * 2) + 3,
+            reviews: event.reviews || Math.floor(Math.random() * 50) + 10,
+            venue: event.venue || "Main Hall",
+            capacity: event.capacity || 100,
+            booked: Math.floor(Math.random() * (event.capacity || 100))
+          }));
+          
+          setEvents(enhancedEvents);
+        }
+      } catch (error) {
+        console.error("Error loading events:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadEvents();
+
+    // Listen for storage changes to update events in real-time
+    const handleStorageChange = () => {
+      const savedEvents = JSON.parse(localStorage.getItem('tn-events') || '[]');
+      setEvents(savedEvents);
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
+
+  const categories = ["All", ...new Set(events.map(event => event.category))];
 
   const filteredEvents = events.filter((event) => {
+    const eventName = event.name || event.title;
+    const eventDescription = event.description || "";
+    
     return (
       (selectedCategory === "All" || event.category === selectedCategory) &&
-      (event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        event.description.toLowerCase().includes(searchTerm.toLowerCase()))
+      (eventName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        eventDescription.toLowerCase().includes(searchTerm.toLowerCase()))
     );
   });
+
+  if (loading) {
+    return <div className="loading-spinner">Loading events...</div>;
+  }
 
   return (
     <section className="event-section">
@@ -142,7 +106,10 @@ const EventSection = () => {
         {filteredEvents.length > 0 ? (
           filteredEvents.map((event) => <EventCard key={event.id} event={event} />)
         ) : (
-          <p className="no-events">No events found. Try adjusting your search or filters.</p>
+          <div className="no-events-message">
+            <h3>No events found</h3>
+            <p>Try adjusting your search or filters, or check back later for new events.</p>
+          </div>
         )}
       </motion.div>
     </section>

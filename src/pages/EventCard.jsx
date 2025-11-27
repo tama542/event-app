@@ -13,24 +13,75 @@ const EventDetailsModal = ({ event, onClose }) => (
       onClick={(e) => e.stopPropagation()}
     >
       <button className="close-button" onClick={onClose}>✕</button>
-      <img src={event.image} alt={event.title} className="modal-image" />
-      <h2>{event.title}</h2>
+      <img 
+        src={event.image || event.img} 
+        alt={event.title || event.name} 
+        className="modal-image"
+        onError={(e) => {
+          e.target.src = '/images/placeholder-event.jpg';
+          e.target.alt = 'Event image not available';
+        }}
+      />
+      <h2>{event.title || event.name}</h2>
       <p>{event.description}</p>
-      <p><strong>Date:</strong> {new Date(event.date).toLocaleDateString()}</p>
-      <p><strong>Time:</strong> {new Date(event.date).toLocaleTimeString()}</p>
-      <p><strong>Price:</strong> ${event.price}</p>
+      <div className="modal-details">
+        <p><strong>Date:</strong> {new Date(event.date).toLocaleDateString()}</p>
+        <p><strong>Time:</strong> {new Date(event.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+        <p><strong>Price:</strong> ${event.price}</p>
+        <p><strong>Venue:</strong> {event.venue || 'TBA'}</p>
+        <p><strong>Category:</strong> {event.category}</p>
+        {event.capacity && (
+          <p><strong>Capacity:</strong> {event.capacity} seats</p>
+        )}
+      </div>
       <div className="reviews">
         <RatingStars rating={event.rating} />
         <span>({event.reviews} reviews)</span>
       </div>
-      <button onClick={onClose} className="btn">Close</button>
+      <div className="modal-actions">
+        <button 
+          onClick={() => {
+            onClose();
+            navigate("/payment", { 
+              state: { 
+                event: event,
+                amount: event.price || 100,
+                bookingReference: `EVT-${event.id}-${Date.now()}`,
+              }
+            });
+          }} 
+          className="btn primary"
+        >
+          Book Now - ${event.price}
+        </button>
+        <button onClick={onClose} className="btn secondary">Close</button>
+      </div>
     </motion.div>
   </div>
 );
 
 const EventCard = ({ event }) => {
   const navigate = useNavigate();
-  const { title, description, date, image, rating, reviews, price, id } = event;
+  const { 
+    title, 
+    name, 
+    description, 
+    date, 
+    image, 
+    img, 
+    rating, 
+    reviews, 
+    price, 
+    id, 
+    venue,
+    capacity,
+    booked 
+  } = event;
+
+  const eventTitle = title || name;
+  const eventImage = image || img;
+  const eventRating = rating || 4;
+  const eventReviews = reviews || 0;
 
   const [timeLeft, setTimeLeft] = useState("");
   const [isFavorite, setIsFavorite] = useState(false);
@@ -65,12 +116,24 @@ const EventCard = ({ event }) => {
     });
   };
 
-  const toggleFavorite = () => setIsFavorite((f) => !f);
+  const toggleFavorite = () => {
+    setIsFavorite((f) => !f);
+    // Save to localStorage
+    const favorites = JSON.parse(localStorage.getItem('tn-favs') || '[]');
+    if (!isFavorite) {
+      const updatedFavorites = [...favorites, event.id];
+      localStorage.setItem('tn-favs', JSON.stringify(updatedFavorites));
+    } else {
+      const updatedFavorites = favorites.filter(favId => favId !== event.id);
+      localStorage.setItem('tn-favs', JSON.stringify(updatedFavorites));
+    }
+  };
+
   const toggleReviews = () => setShowReviews((r) => !r);
 
   const shareEvent = async () => {
     const shareData = { 
-      title: `Event: ${title}`, 
+      title: `Event: ${eventTitle}`, 
       text: description, 
       url: window.location.href 
     };
@@ -90,18 +153,36 @@ const EventCard = ({ event }) => {
   const countdownStyle = timeLeft.includes("Event Started") ? 
     { color: "red", fontWeight: "bold" } : {};
 
+  // Check if event is in favorites on component mount
+  useEffect(() => {
+    const favorites = JSON.parse(localStorage.getItem('tn-favs') || '[]');
+    setIsFavorite(favorites.includes(event.id));
+  }, [event.id]);
+
   return (
     <motion.div 
       className="event-card" 
       whileHover={{ scale: 1.02 }}
       layout
     >
-      <img src={image} alt={title} className="event-image" />
+      <img 
+        src={eventImage} 
+        alt={eventTitle} 
+        className="event-image"
+        onError={(e) => {
+          e.target.src = '/images/placeholder-event.jpg';
+          e.target.alt = 'Event image not available';
+        }}
+      />
 
       <div className="event-card-content">
         <div className="top-header">
-          <h3>{title}</h3>
-          <button onClick={toggleFavorite} className="favorite-btn">
+          <h3>{eventTitle}</h3>
+          <button 
+            onClick={toggleFavorite} 
+            className="favorite-btn"
+            aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+          >
             {isFavorite ? "❤️" : "🤍"}
           </button>
         </div>
@@ -110,17 +191,29 @@ const EventCard = ({ event }) => {
           {description}
         </p>
         
-        <p style={countdownStyle}>
-          <strong>Starts in:</strong> {timeLeft}
-        </p>
+        <div className="event-meta-info">
+          <p style={countdownStyle}>
+            <strong>Starts in:</strong> {timeLeft}
+          </p>
+          {venue && (
+            <p className="event-venue">
+              <strong>Venue:</strong> {venue}
+            </p>
+          )}
+        </div>
 
         <div className="event-price">
           <strong>Price: ${price}</strong>
+          {capacity && booked !== undefined && (
+            <span className="event-capacity">
+              {booked}/{capacity} booked
+            </span>
+          )}
         </div>
 
         <div className="reviews">
-          <RatingStars rating={rating} />
-          <span>({reviews} reviews)</span>
+          <RatingStars rating={eventRating} />
+          <span>({eventReviews} reviews)</span>
           <button onClick={toggleReviews} className="toggle-reviews-btn">
             {showReviews ? "Hide" : "Show"} Reviews
           </button>
@@ -150,9 +243,9 @@ const EventCard = ({ event }) => {
             
             <button
               onClick={() => {
-                const subject = encodeURIComponent(`Invitation to ${title}`);
+                const subject = encodeURIComponent(`Invitation to ${eventTitle}`);
                 const body = encodeURIComponent(
-                  `Hey,\n\nI'd love for you to join me at "${title}"!\n\nDetails:\n${description}\nDate: ${new Date(date).toLocaleDateString()}\nTime: ${new Date(date).toLocaleTimeString()}\nPrice: $${price}\n\nHere's the link: ${window.location.href}\n\nHope to see you there!`
+                  `Hey,\n\nI'd love for you to join me at "${eventTitle}"!\n\nDetails:\n${description}\nDate: ${new Date(date).toLocaleDateString()}\nTime: ${new Date(date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}\nPrice: $${price}\nVenue: ${venue || 'TBA'}\n\nHere's the link: ${window.location.href}\n\nHope to see you there!`
                 );
                 window.location.href = `mailto:?subject=${subject}&body=${body}`;
               }}
