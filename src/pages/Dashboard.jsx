@@ -30,8 +30,19 @@ const Dashboard = () => {
   });
   const [editingEventId, setEditingEventId] = useState(null);
 
+  // Check if user is admin
+  useEffect(() => {
+    if (user && user.role !== 'admin') {
+      toast.error("Access denied. Admin privileges required.");
+      navigate("/");
+    }
+  }, [user, navigate]);
+
   // Load events from JSON file and localStorage
   useEffect(() => {
+    // Only load if user is admin
+    if (user?.role !== 'admin') return;
+
     const loadEvents = async () => {
       setLoading(true);
       try {
@@ -70,16 +81,16 @@ const Dashboard = () => {
     };
 
     loadEvents();
-  }, []);
+  }, [user]);
 
   // Generate bookings whenever events change
   useEffect(() => {
-    if (events.length > 0) {
+    if (events.length > 0 && user?.role === 'admin') {
       const sampleBookings = generateBookings(events);
       setBookings(sampleBookings);
       calculateStats(events, sampleBookings);
     }
-  }, [events]);
+  }, [events, user]);
 
   const generateBookings = (eventsData) => {
     const bookingTemplates = [
@@ -239,12 +250,30 @@ const Dashboard = () => {
     </motion.div>
   );
 
+  // Show access denied for non-admin users
   if (!user) {
     return (
       <div className="dashboard-container">
         <div className="dashboard-header">
           <h1>Event Dashboard</h1>
           <p>Please log in to access the dashboard</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (user.role !== 'admin') {
+    return (
+      <div className="dashboard-container">
+        <div className="dashboard-header">
+          <h1>Access Denied</h1>
+          <p>You need admin privileges to access the dashboard.</p>
+          <button 
+            className="btn primary" 
+            onClick={() => navigate("/")}
+          >
+            Go Back Home
+          </button>
         </div>
       </div>
     );

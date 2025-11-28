@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 function Navbar() {
-  const { user, logout } = useAuth(); // Use logout instead of setUser
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -18,13 +18,12 @@ function Navbar() {
   }, [darkMode]);
 
   const handleLogout = () => {
-    logout(); // Use the logout function from AuthContext
+    logout();
     setMenuOpen(false);
     setDropdownOpen(false);
     navigate("/login");
   };
 
-  // Close the mobile menu when a link is clicked
   const handleLinkClick = () => {
     setMenuOpen(false);
     setDropdownOpen(false);
@@ -37,7 +36,7 @@ function Navbar() {
           TN events
         </Link>
         
-        {/* Dark mode toggle - always visible */}
+        {/* Dark mode toggle */}
         <button
           className="dark-mode-toggle"
           onClick={() => setDarkMode(!darkMode)}
@@ -45,7 +44,7 @@ function Navbar() {
           {darkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
         </button>
 
-        {/* Hamburger menu - show for all users */}
+        {/* Hamburger menu */}
         <button 
           className={`hamburger ${menuOpen ? "active" : ""}`} 
           onClick={() => setMenuOpen(!menuOpen)}
@@ -55,7 +54,7 @@ function Navbar() {
           <span className="bar"></span>
         </button>
 
-        {/* Navigation menu - different content based on auth status */}
+        {/* Navigation menu */}
         <ul className={`nav-menu ${menuOpen ? "active" : ""}`}>
           {user ? (
             // Logged in user menu
@@ -98,11 +97,15 @@ function Navbar() {
                   Contact
                 </Link>
               </li>
-              <li>
-                <Link to="/dashboard" onClick={handleLinkClick}>
-                  Dashboard
-                </Link>
-              </li>
+              
+              {/* Show Dashboard link only for admin users */}
+              {user.role === 'admin' && (
+                <li>
+                  <Link to="/dashboard" onClick={handleLinkClick}>
+                    Dashboard
+                  </Link>
+                </li>
+              )}
               
               {/* Show Admin link only for admin users */}
               {user.role === 'admin' && (
