@@ -140,35 +140,54 @@ export default function Home() {
         </select>
       </section>
 
-      {/* EVENTS GRID */}
-      <section className="events-grid">
-        {filtered.map(e => (
-          <motion.div key={e.id} className="event-card" whileHover={{ scale: 1.05 }}>
-            <div className="img-wrap" onClick={() => openModal(e)}>
-              <img src={e.img} alt={e.name} />
-              <button
-                className={favs.includes(e.id) ? "fav-btn active" : "fav-btn"}
-                onClick={x => {
-                  x.stopPropagation();
-                  toggleFav(e.id);
-                }}
-                aria-label="Toggle favorite"
-              >
-                ❤
-              </button>
-            </div>
-            <div className="info">
-              <h3>{e.name}</h3>
-              <p className="meta">
-                {new Date(e.date).toLocaleDateString()} · {e.category}
-              </p>
-              <p className="price">{e.price > 0 ? `$${e.price}` : "Free"}</p>
-              <Link to={`/${e.id}`} className="btn small">Details</Link>
-            </div>
-          </motion.div>
-        ))}
-        {filtered.length === 0 && <p className="no-results">No events match your search.</p>}
-      </section>
+     {/* SIMPLIFIED VERSION */}
+<section className="events-grid">
+  {filtered.map(e => (
+    <motion.div key={e.id} className="event-card" whileHover={{ scale: 1.05 }}>
+      <div className="event-image-container" onClick={() => openModal(e)}>
+        <img src={e.img} alt={e.name} className="event-image" />
+        <button
+          className={favs.includes(e.id) ? "favorite-btn active" : "favorite-btn"}
+          onClick={x => {
+            x.stopPropagation();
+            toggleFav(e.id);
+          }}
+        >
+          ❤
+        </button>
+      </div>
+      
+      <div className="event-content">
+        <h3>{e.name}</h3>
+        <p className="event-description">
+          {new Date(e.date).toLocaleDateString()} · {e.category}
+        </p>
+        
+        <div className="event-price-rating">
+          <div className="event-price">
+            {e.price > 0 ? `$${e.price}` : "Free"}
+          </div>
+        </div>
+        
+        {/* <div className="event-actions">
+          <button 
+            className="btn-secondary"
+            onClick={() => openModal(e)}
+          >
+            Quick View
+          </button>
+          <Link to={`/event/${e.id}`} className="btn-primary">
+            Details
+          </Link>
+        </div> */}
+      </div>
+    </motion.div>
+  ))}
+  
+  {filtered.length === 0 && (
+    <p className="no-results">No events match your search.</p>
+  )}
+</section>
 
       {/* TESTIMONIALS */}
       <section className="testimonials">
